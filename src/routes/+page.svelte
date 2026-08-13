@@ -7,7 +7,6 @@
   import Greetings from '$lib/components/Greetings.svelte';
   import SearchBar from '$lib/components/SearchBar.svelte';
   import QuickLinks from '$lib/components/QuickLinks.svelte';
-  import Weather from '$lib/components/Weather.svelte';
   import Quotes from '$lib/components/Quotes.svelte';
   import Pomodoro from '$lib/components/Pomodoro.svelte';
   import Notes from '$lib/components/Notes.svelte';
@@ -31,13 +30,6 @@
   <!-- Dynamic Background -->
   <Background />
 
-  <!-- Top bar widgets (Weather) -->
-  <header class="top-bar">
-    {#if widgets.weather}
-      <Weather />
-    {/if}
-  </header>
-
   <!-- Central Interface Content -->
   <div class="content-wrapper">
     <!-- Clock & Date -->
@@ -45,12 +37,12 @@
       <Clock />
     {/if}
 
-    <!-- Greetings -->
+    <!-- Greetings & Integrated Weather -->
     {#if widgets.greetings}
       <Greetings />
     {/if}
 
-    <!-- Buscador Google Central -->
+    <!-- Central Google Search Bar -->
     {#if widgets.search}
       <SearchBar />
     {/if}
@@ -60,7 +52,7 @@
       <QuickLinks />
     {/if}
 
-    <!-- Additional Widgets -->
+    <!-- Additional Optional Widgets -->
     {#if widgets.quotes}
       <Quotes />
     {/if}
@@ -82,7 +74,7 @@
       onclick={handleNextBg}
       title="Cambiar fondo de pantalla"
     >
-      <Image size={16} />
+      <Image size={15} />
     </button>
 
     <button 
@@ -91,7 +83,7 @@
       onclick={toggleSettings}
       title="Ajustes de NovaTab"
     >
-      <Settings size={16} />
+      <Settings size={15} />
     </button>
   </div>
 
@@ -109,23 +101,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 18px;
+    justify-content: center;
+    padding: 24px 20px;
     z-index: 1;
-  }
-
-  .top-bar {
-    width: 100%;
-    max-width: 1080px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    z-index: 10;
   }
 
   .content-wrapper {
     width: 100%;
-    max-width: 720px;
+    max-width: 680px;
     margin: auto 0;
     display: flex;
     flex-direction: column;
@@ -135,28 +118,32 @@
 
   .floating-controls {
     position: fixed;
-    bottom: 14px;
-    right: 18px;
+    bottom: 16px;
+    right: 20px;
     display: flex;
     gap: 8px;
     z-index: 20;
   }
 
   .float-btn {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .float-btn:hover {
-    transform: scale(1.08) rotate(12deg);
-    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.08) rotate(8deg);
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 </style>

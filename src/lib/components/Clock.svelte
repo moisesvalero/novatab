@@ -31,7 +31,6 @@
   let displaySeconds = $derived(seconds.toString().padStart(2, '0'));
   let ampm = $derived(hours >= 12 ? 'PM' : 'AM');
 
-  // Exact Bonjourr style: "Jueves, 13 de agosto"
   let dateFormatted = $derived(() => {
     const raw = time.toLocaleDateString('es-ES', {
       weekday: 'long',
@@ -84,14 +83,14 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-bottom: 0.8rem;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    margin-bottom: 0.6rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   }
 
   .time-display {
     font-size: clamp(3.8rem, 8vw, 6.2rem);
-    font-weight: 200; /* Apple/Bonjourr thin elegant weight */
-    letter-spacing: -0.04em;
+    font-weight: 300; /* Crisp, elegant & highly legible */
+    letter-spacing: -0.035em;
     line-height: 0.95;
     color: #ffffff;
     display: flex;
@@ -101,24 +100,24 @@
   }
 
   .colon {
-    opacity: 0.8;
-    font-weight: 200;
+    opacity: 0.85;
+    font-weight: 300;
     margin: 0 -1px;
     animation: pulse 2s infinite ease-in-out;
   }
 
   .ampm {
     font-size: 0.3em;
-    font-weight: 400;
+    font-weight: 500;
     margin-left: 8px;
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
   .date-display {
-    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+    font-size: clamp(0.9rem, 1.8vw, 1.12rem);
     font-weight: 400;
     color: rgba(255, 255, 255, 0.9);
-    margin-top: 0.4rem;
+    margin-top: 0.35rem;
     letter-spacing: 0.01em;
   }
 
