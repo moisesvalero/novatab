@@ -60,7 +60,12 @@ export const CURATED_BACKGROUNDS = [
 ];
 
 function getDailyIndex(total) {
-  const dateStr = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const dateStr = `${year}-${month}-${day}`;
+
   let hash = 0;
   for (let i = 0; i < dateStr.length; i++) {
     hash = (hash << 5) - hash + dateStr.charCodeAt(i);
@@ -75,7 +80,7 @@ const DEFAULT_BG = {
   blur: 0, // 0 to 25px
   darkness: 30, // 0 to 80%
   customUrl: '',
-  changeFrequency: 'daily', // 'daily' | 'newtab' | 'manual'
+  changeFrequency: 'daily', // STRICT DEFAULT: 'daily'
   solidColor: '#0f172a',
   gradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%)'
 };
@@ -89,14 +94,16 @@ function createBackgroundStore() {
       const saved = localStorage.getItem('novatab_background');
       if (saved) {
         const parsed = JSON.parse(saved);
+        // Force migration: override any legacy 'newtab' setting to 'daily'
+        if (!parsed.changeFrequency || parsed.changeFrequency === 'newtab') {
+          parsed.changeFrequency = 'daily';
+        }
         if (parsed.changeFrequency === 'daily') {
           parsed.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
-        } else if (parsed.changeFrequency === 'newtab') {
-          parsed.currentIndex = (parsed.currentIndex + 1) % CURATED_BACKGROUNDS.length;
         }
         initial = { ...DEFAULT_BG, ...parsed };
       } else {
-        initial.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
+        initial = { ...DEFAULT_BG, changeFrequency: 'daily', currentIndex: getDailyIndex(CURATED_BACKGROUNDS.length) };
       }
       localStorage.setItem('novatab_background', JSON.stringify(initial));
     } catch (e) {
