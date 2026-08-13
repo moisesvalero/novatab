@@ -23,7 +23,7 @@
     style="background: rgba(0, 0, 0, {bgState.darkness / 100});"
   ></div>
 
-  <!-- Radial Vignette for Bonjourr depth -->
+  <!-- Radial Vignette for depth -->
   <div class="bg-vignette"></div>
 </div>
 
@@ -71,7 +71,18 @@
   .bg-image {
     background-size: cover;
     background-position: center;
-    transform: scale(1.05);
+    animation: slowZoomIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes slowZoomIn {
+    0% {
+      transform: scale(1.08);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1.03);
+      opacity: 1;
+    }
   }
 
   .bg-vignette {
@@ -91,7 +102,7 @@
 
   .credit-tag, .author-tag {
     font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.7);
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
