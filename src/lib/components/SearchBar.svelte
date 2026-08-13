@@ -106,7 +106,7 @@
   });
 </script>
 
-<div class="search-container animate-reveal delay-3">
+<div class="search-container">
   <form onsubmit={handleSubmit} class="search-form {isFocused ? 'focused' : ''}">
     <div class="search-icon-wrapper">
       <Search size={18} class="search-icon" />
@@ -173,7 +173,7 @@
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 24px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .search-form:hover {

@@ -34,7 +34,7 @@
   });
 </script>
 
-<div class="greeting-container animate-reveal delay-2">
+<div class="greeting-container">
   <h2 class="greeting-text">
     {greetingText}{#if userName}, <span class="name">{userName}</span>{/if}
   </h2>

@@ -45,7 +45,7 @@
   let secDeg = $derived(seconds * 6);
 </script>
 
-<div class="clock-widget animate-reveal delay-1">
+<div class="clock-widget">
   {#if settings.clockType === 'digital'}
     <div class="digital-clock">
       <h1 class="time-display">
@@ -89,7 +89,7 @@
 
   .time-display {
     font-size: clamp(3.8rem, 8vw, 6.2rem);
-    font-weight: 300; /* Crisp, elegant & highly legible */
+    font-weight: 300;
     letter-spacing: -0.035em;
     line-height: 0.95;
     color: #ffffff;

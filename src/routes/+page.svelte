@@ -31,7 +31,7 @@
   <Background />
 
   <!-- Central Interface Content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper animate-fade-in">
     <!-- Clock & Date -->
     {#if widgets.clock}
       <Clock />
@@ -67,7 +67,7 @@
   </div>
 
   <!-- Floating Quick Actions (Settings & Change BG) -->
-  <div class="floating-controls">
+  <div class="floating-controls animate-fade-in">
     <button 
       type="button" 
       class="float-btn glass-panel" 
