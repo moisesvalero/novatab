@@ -82,14 +82,14 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-bottom: 0.6rem;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    margin-bottom: 0.4rem;
+    text-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   }
 
   .time-display {
-    font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+    font-size: clamp(3.4rem, 7vw, 5.4rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
     line-height: 1;
     color: #ffffff;
     display: flex;
@@ -99,7 +99,7 @@
   }
 
   .colon {
-    opacity: 0.8;
+    opacity: 0.85;
     animation: pulse 2s infinite ease-in-out;
   }
 
@@ -111,18 +111,18 @@
   }
 
   .date-display {
-    font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+    font-size: clamp(0.88rem, 1.8vw, 1.15rem);
     font-weight: 500;
     color: rgba(255, 255, 255, 0.85);
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
     text-transform: capitalize;
     letter-spacing: 0.02em;
   }
 
   /* Analog Clock */
   .analog-clock {
-    width: 110px;
-    height: 110px;
+    width: 125px;
+    height: 125px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
@@ -148,21 +148,21 @@
 
   .hour-hand {
     width: 3.5px;
-    height: 28px;
+    height: 32px;
     background: #ffffff;
     margin-left: -1.75px;
   }
 
   .minute-hand {
     width: 2.5px;
-    height: 40px;
+    height: 44px;
     background: rgba(255, 255, 255, 0.85);
     margin-left: -1.25px;
   }
 
   .second-hand {
     width: 1.5px;
-    height: 44px;
+    height: 48px;
     background: #38bdf8;
     margin-left: -0.75px;
   }

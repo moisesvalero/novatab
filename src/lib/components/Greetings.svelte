@@ -22,12 +22,12 @@
 <style>
   .greeting-container {
     text-align: center;
-    margin-bottom: 0.8rem;
+    margin-bottom: 2rem; /* Separa cómodamente el reloj/saludo del buscador */
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   }
 
   .greeting-text {
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    font-size: clamp(1.05rem, 2.2vw, 1.4rem);
     font-weight: 500;
     color: rgba(255, 255, 255, 0.95);
     letter-spacing: -0.01em;
