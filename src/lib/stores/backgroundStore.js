@@ -59,13 +59,23 @@ export const CURATED_BACKGROUNDS = [
   }
 ];
 
+function getDailyIndex(total) {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = (hash << 5) - hash + dateStr.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash) % total;
+}
+
 const DEFAULT_BG = {
   type: 'image', // 'image' | 'solid' | 'gradient'
-  currentIndex: Math.floor(Math.random() * CURATED_BACKGROUNDS.length),
+  currentIndex: getDailyIndex(CURATED_BACKGROUNDS.length),
   blur: 0, // 0 to 25px
   darkness: 30, // 0 to 80%
   customUrl: '',
-  changeFrequency: 'newtab', // 'newtab' | 'manual'
+  changeFrequency: 'daily', // 'daily' | 'newtab' | 'manual'
   solidColor: '#0f172a',
   gradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%)'
 };
@@ -79,13 +89,14 @@ function createBackgroundStore() {
       const saved = localStorage.getItem('novatab_background');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // If frequency is 'newtab', rotate index automatically on every new tab open!
-        if (parsed.changeFrequency !== 'manual') {
+        if (parsed.changeFrequency === 'daily') {
+          parsed.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
+        } else if (parsed.changeFrequency === 'newtab') {
           parsed.currentIndex = (parsed.currentIndex + 1) % CURATED_BACKGROUNDS.length;
         }
         initial = { ...DEFAULT_BG, ...parsed };
       } else {
-        initial.currentIndex = Math.floor(Math.random() * CURATED_BACKGROUNDS.length);
+        initial.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
       }
       localStorage.setItem('novatab_background', JSON.stringify(initial));
     } catch (e) {
@@ -113,7 +124,11 @@ function createBackgroundStore() {
     },
     setFrequency: (freq) => {
       update((current) => {
-        const updated = { ...current, changeFrequency: freq };
+        let newIdx = current.currentIndex;
+        if (freq === 'daily') {
+          newIdx = getDailyIndex(CURATED_BACKGROUNDS.length);
+        }
+        const updated = { ...current, changeFrequency: freq, currentIndex: newIdx };
         save(updated);
         return updated;
       });

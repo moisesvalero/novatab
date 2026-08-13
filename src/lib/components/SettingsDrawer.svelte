@@ -127,7 +127,8 @@
               value={bg.changeFrequency}
               onchange={handleFrequencyChange}
             >
-              <option value="newtab">En cada pestaña nueva (Automático)</option>
+              <option value="daily">Una foto al día (Recomendado)</option>
+              <option value="newtab">En cada pestaña nueva</option>
               <option value="manual">Manual (Solo al hacer clic)</option>
             </select>
           </div>
