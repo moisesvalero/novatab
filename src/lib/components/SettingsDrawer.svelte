@@ -16,6 +16,10 @@
     backgroundStore.nextBackground();
   }
 
+  function handleFrequencyChange(e) {
+    backgroundStore.setFrequency(e.target.value);
+  }
+
   function handleBlurChange(e) {
     backgroundStore.setBlur(parseInt(e.target.value, 10));
   }
@@ -41,14 +45,14 @@
 </script>
 
 {#if isOpen}
-  <div class="drawer-backdrop" on:click={close}>
-    <aside class="drawer-panel glass-card animate-fade-in" on:click={(e) => e.stopPropagation()}>
+  <div class="drawer-backdrop" onclick={close}>
+    <aside class="drawer-panel glass-card animate-fade-in" onclick={(e) => e.stopPropagation()}>
       <div class="drawer-header">
         <div class="title-box">
           <Settings size={20} class="header-icon" />
           <h2>Ajustes de NovaTab</h2>
         </div>
-        <button type="button" class="btn-close" on:click={close}>
+        <button type="button" class="btn-close" onclick={close}>
           <X size={20} />
         </button>
       </div>
@@ -64,8 +68,8 @@
               id="userName" 
               type="text" 
               bind:value={settings.userName} 
-              on:input={() => settingsStore.set(settings)}
-              placeholder="Ej: Moi"
+              oninput={() => settingsStore.set(settings)}
+              placeholder="Ej: Moisés"
             />
           </div>
 
@@ -77,7 +81,7 @@
                 type="text" 
                 maxLength={2}
                 bind:value={settings.tabEmoji} 
-                on:input={() => settingsStore.set(settings)}
+                oninput={() => settingsStore.set(settings)}
                 placeholder="⚡"
               />
             </div>
@@ -87,7 +91,7 @@
                 id="tabTitle" 
                 type="text" 
                 bind:value={settings.tabTitle} 
-                on:input={() => settingsStore.set(settings)}
+                oninput={() => settingsStore.set(settings)}
                 placeholder="NovaTab"
               />
             </div>
@@ -98,7 +102,7 @@
             <select 
               id="searchEngine" 
               bind:value={settings.searchEngine}
-              on:change={() => settingsStore.set(settings)}
+              onchange={() => settingsStore.set(settings)}
             >
               <option value="google">Google (Recomendado)</option>
               <option value="duckduckgo">DuckDuckGo</option>
@@ -112,9 +116,21 @@
         <section class="section">
           <h3>Fondo de Pantalla</h3>
 
-          <button type="button" class="btn-primary-action" on:click={handleNextBackground}>
+          <button type="button" class="btn-primary-action" onclick={handleNextBackground}>
             <Image size={16} /> Cambiar al siguiente fondo
           </button>
+
+          <div class="row">
+            <label for="bgFrequency">Frecuencia de Cambio</label>
+            <select 
+              id="bgFrequency" 
+              value={bg.changeFrequency}
+              onchange={handleFrequencyChange}
+            >
+              <option value="newtab">En cada pestaña nueva (Automático)</option>
+              <option value="manual">Manual (Solo al hacer clic)</option>
+            </select>
+          </div>
 
           <div class="row range-row">
             <label for="bgBlur">Desenfoque (Blur): {bg.blur}px</label>
@@ -124,7 +140,7 @@
               min="0" 
               max="25" 
               value={bg.blur} 
-              on:input={handleBlurChange}
+              oninput={handleBlurChange}
             />
           </div>
 
@@ -136,7 +152,7 @@
               min="0" 
               max="80" 
               value={bg.darkness} 
-              on:input={handleDarknessChange}
+              oninput={handleDarknessChange}
             />
           </div>
         </section>
@@ -151,7 +167,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.search} 
-                on:change={() => settingsStore.toggleWidget('search')}
+                onchange={() => settingsStore.toggleWidget('search')}
               />
             </label>
 
@@ -160,7 +176,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.clock} 
-                on:change={() => settingsStore.toggleWidget('clock')}
+                onchange={() => settingsStore.toggleWidget('clock')}
               />
             </label>
 
@@ -169,7 +185,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.greetings} 
-                on:change={() => settingsStore.toggleWidget('greetings')}
+                onchange={() => settingsStore.toggleWidget('greetings')}
               />
             </label>
 
@@ -178,7 +194,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.quickLinks} 
-                on:change={() => settingsStore.toggleWidget('quickLinks')}
+                onchange={() => settingsStore.toggleWidget('quickLinks')}
               />
             </label>
 
@@ -187,7 +203,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.weather} 
-                on:change={() => settingsStore.toggleWidget('weather')}
+                onchange={() => settingsStore.toggleWidget('weather')}
               />
             </label>
 
@@ -196,7 +212,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.quotes} 
-                on:change={() => settingsStore.toggleWidget('quotes')}
+                onchange={() => settingsStore.toggleWidget('quotes')}
               />
             </label>
 
@@ -205,7 +221,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.pomodoro} 
-                on:change={() => settingsStore.toggleWidget('pomodoro')}
+                onchange={() => settingsStore.toggleWidget('pomodoro')}
               />
             </label>
 
@@ -214,7 +230,7 @@
               <input 
                 type="checkbox" 
                 checked={settings.widgets.notes} 
-                on:change={() => settingsStore.toggleWidget('notes')}
+                onchange={() => settingsStore.toggleWidget('notes')}
               />
             </label>
           </div>
@@ -229,7 +245,7 @@
             <select 
               id="clockType" 
               bind:value={settings.clockType}
-              on:change={() => settingsStore.set(settings)}
+              onchange={() => settingsStore.set(settings)}
             >
               <option value="digital">Digital</option>
               <option value="analog">Analógico</option>
@@ -241,7 +257,7 @@
             <select 
               id="clockFormat" 
               bind:value={settings.clockFormat}
-              on:change={() => settingsStore.set(settings)}
+              onchange={() => settingsStore.set(settings)}
             >
               <option value="24h">24 Horas (14:30)</option>
               <option value="12h">12 Horas (2:30 PM)</option>
@@ -253,17 +269,17 @@
             <input 
               type="checkbox" 
               bind:checked={settings.showSeconds}
-              on:change={() => settingsStore.set(settings)}
+              onchange={() => settingsStore.set(settings)}
             />
           </label>
         </section>
 
         <!-- EXPORT & RESET -->
         <section class="section footer-actions">
-          <button type="button" class="btn-sec" on:click={exportSettings}>
+          <button type="button" class="btn-sec" onclick={exportSettings}>
             <Download size={15} /> Exportar Ajustes
           </button>
-          <button type="button" class="btn-reset" on:click={() => settingsStore.reset()}>
+          <button type="button" class="btn-reset" onclick={() => settingsStore.reset()}>
             <RotateCcw size={15} /> Restaurar Por Defecto
           </button>
         </section>
