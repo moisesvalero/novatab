@@ -1,8 +1,8 @@
 # ⚡ NovaTab — Modern Startpage & New Tab for Web Browsers
 
-![NovaTab Banner](https://raw.githubusercontent.com/moisesvalero/novatab/main/static/favicon.ico)
-
 > **NovaTab** es una aplicación de nueva pestaña (Startpage) minimalista, hiperrápida y altamente personalizable inspirada en [Bonjourr](https://online.bonjourr.fr/), con **diseño Glassmorphism**, **buscador de Google central en tiempo real**, **fondos de pantalla dinámicos en HD**, **clima en vivo** y **gestión de marcadores rápidos**.
+
+🌐 **Live Demo**: [https://start.moisesvalero.es](https://start.moisesvalero.es) (Vercel Backup: [https://novatab-five.vercel.app](https://novatab-five.vercel.app))
 
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-5-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://svelte.dev/)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
