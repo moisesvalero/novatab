@@ -22,12 +22,12 @@
 <style>
   .greeting-container {
     text-align: center;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   }
 
   .greeting-text {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
     font-weight: 500;
     color: rgba(255, 255, 255, 0.95);
     letter-spacing: -0.01em;

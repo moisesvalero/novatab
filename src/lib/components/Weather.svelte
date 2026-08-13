@@ -38,21 +38,21 @@
   <div class="weather-widget animate-fade-in" title="{weather.desc} en {weatherCity}">
     <div class="weather-icon-box">
       {#if weather.icon === 'Sun'}
-        <Sun size={26} class="sun-icon" />
+        <Sun size={20} class="sun-icon" />
       {:else if weather.icon === 'CloudSun' || weather.icon === 'SunCloud'}
-        <CloudSun size={26} class="cloud-sun-icon" />
+        <CloudSun size={20} class="cloud-sun-icon" />
       {:else if weather.icon === 'CloudRain'}
-        <CloudRain size={26} class="rain-icon" />
+        <CloudRain size={20} class="rain-icon" />
       {:else if weather.icon === 'CloudDrizzle'}
-        <CloudDrizzle size={26} class="drizzle-icon" />
+        <CloudDrizzle size={20} class="drizzle-icon" />
       {:else if weather.icon === 'CloudLightning'}
-        <CloudLightning size={26} class="lightning-icon" />
+        <CloudLightning size={20} class="lightning-icon" />
       {:else if weather.icon === 'Snowflake'}
-        <Snowflake size={26} class="snow-icon" />
+        <Snowflake size={20} class="snow-icon" />
       {:else if weather.icon === 'CloudFog'}
-        <CloudFog size={26} class="fog-icon" />
+        <CloudFog size={20} class="fog-icon" />
       {:else}
-        <Cloud size={26} class="cloud-icon" />
+        <Cloud size={20} class="cloud-icon" />
       {/if}
     </div>
 
@@ -67,21 +67,21 @@
   .weather-widget {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 18px;
+    gap: 8px;
+    padding: 6px 14px;
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 9999px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    margin-bottom: 0.8rem;
     transition: all 0.2s ease;
   }
 
   .weather-widget:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
   .weather-icon-box {
@@ -94,17 +94,17 @@
   .weather-info {
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: 6px;
   }
 
   .temp {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #ffffff;
   }
 
   .desc {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
     text-transform: capitalize;

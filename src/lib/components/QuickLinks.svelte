@@ -62,7 +62,7 @@
             <img 
               src={getFaviconUrl(link.url)} 
               alt={link.title} 
-              on:error={handleFaviconError}
+              onerror={handleFaviconError}
               loading="lazy"
             />
           </div>
@@ -71,18 +71,18 @@
           <button 
             type="button"
             class="btn-edit" 
-            on:click={(e) => openEditModal(link, e)}
+            onclick={(e) => openEditModal(link, e)}
             title="Editar acceso directo"
           >
-            <Edit2 size={13} />
+            <Edit2 size={11} />
           </button>
         </a>
       </div>
     {/each}
 
-    <button type="button" class="add-card glass-panel" on:click={openAddModal} title="Añadir acceso directo">
+    <button type="button" class="add-card glass-panel" onclick={openAddModal} title="Añadir acceso directo">
       <div class="icon-box add-box">
-        <Plus size={22} />
+        <Plus size={18} />
       </div>
       <span class="link-title">Añadir</span>
     </button>
@@ -90,12 +90,12 @@
 </div>
 
 {#if isModalOpen}
-  <div class="modal-backdrop" on:click={() => (isModalOpen = false)}>
-    <div class="modal-content glass-card" on:click={(e) => e.stopPropagation()}>
+  <div class="modal-backdrop" onclick={() => (isModalOpen = false)}>
+    <div class="modal-content glass-card" onclick={(e) => e.stopPropagation()}>
       <div class="modal-header">
         <h3>{editingId ? 'Editar Acceso Directo' : 'Añadir Acceso Directo'}</h3>
-        <button type="button" class="btn-close" on:click={() => (isModalOpen = false)}>
-          <X size={18} />
+        <button type="button" class="btn-close" onclick={() => (isModalOpen = false)}>
+          <X size={16} />
         </button>
       </div>
 
@@ -123,11 +123,11 @@
 
       <div class="modal-footer">
         {#if editingId}
-          <button type="button" class="btn-delete" on:click={(e) => handleDelete(editingId, e)}>
-            <Trash2 size={16} /> Borrar
+          <button type="button" class="btn-delete" onclick={(e) => handleDelete(editingId, e)}>
+            <Trash2 size={14} /> Borrar
           </button>
         {/if}
-        <button type="button" class="btn-save" on:click={handleSave}>
+        <button type="button" class="btn-save" onclick={handleSave}>
           Guardar
         </button>
       </div>
@@ -138,15 +138,15 @@
 <style>
   .quicklinks-container {
     width: 100%;
-    max-width: 820px;
-    margin: 0 auto 2rem auto;
+    max-width: 680px;
+    margin: 0 auto 1.4rem auto;
     z-index: 10;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 12px;
     justify-content: center;
   }
 
@@ -159,48 +159,48 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 16px 12px;
-    height: 105px;
+    padding: 10px 8px;
+    height: 80px;
     position: relative;
     overflow: hidden;
   }
 
   .link-card:hover, .add-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
 
   .icon-box {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     transition: transform 0.2s ease;
   }
 
   .link-card:hover .icon-box {
-    transform: scale(1.08);
+    transform: scale(1.06);
   }
 
   .icon-box img {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     object-fit: contain;
   }
 
   .add-box {
-    background: rgba(56, 189, 248, 0.2);
+    background: rgba(56, 189, 248, 0.18);
     color: #38bdf8;
     border: 1px dashed rgba(56, 189, 248, 0.5);
   }
 
   .link-title {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.95);
     text-align: center;
@@ -212,10 +212,10 @@
 
   .btn-edit {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 22px;
-    height: 22px;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.4);
     color: #ffffff;
@@ -232,7 +232,7 @@
 
   .btn-edit:hover {
     background: rgba(56, 189, 248, 0.8);
-    transform: scale(1.15);
+    transform: scale(1.1);
   }
 
   /* Modal */
@@ -253,23 +253,23 @@
 
   .modal-content {
     width: 100%;
-    max-width: 420px;
-    padding: 24px;
-    background: rgba(18, 24, 38, 0.9);
+    max-width: 380px;
+    padding: 20px;
+    background: rgba(18, 24, 38, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
   }
 
   .modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .modal-header h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #ffffff;
   }
@@ -288,23 +288,23 @@
   .modal-body label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
-    font-size: 0.88rem;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
   }
 
   .modal-body span {
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   .modal-body input {
-    padding: 12px 14px;
+    padding: 10px 12px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    border-radius: 8px;
     color: #ffffff;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .modal-body input:focus {
@@ -316,17 +316,17 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 10px;
+    margin-top: 20px;
   }
 
   .btn-save {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
     color: #ffffff;
     font-weight: 600;
-    border-radius: 10px;
-    font-size: 0.92rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
   }
 
   .btn-save:hover {
@@ -337,14 +337,14 @@
   .btn-delete {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
+    gap: 5px;
+    padding: 8px 14px;
     background: rgba(239, 68, 68, 0.2);
     color: #f87171;
     border: 1px solid rgba(239, 68, 68, 0.4);
     font-weight: 500;
-    border-radius: 10px;
-    font-size: 0.88rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
     margin-right: auto;
   }
 

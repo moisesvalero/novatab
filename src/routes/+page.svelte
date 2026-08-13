@@ -82,7 +82,7 @@
       onclick={handleNextBg}
       title="Cambiar fondo de pantalla"
     >
-      <Image size={18} />
+      <Image size={16} />
     </button>
 
     <button 
@@ -91,7 +91,7 @@
       onclick={toggleSettings}
       title="Ajustes de NovaTab"
     >
-      <Settings size={18} />
+      <Settings size={16} />
     </button>
   </div>
 
@@ -110,13 +110,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 24px 20px;
+    padding: 16px 18px;
     z-index: 1;
   }
 
   .top-bar {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1080px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -125,7 +125,7 @@
 
   .content-wrapper {
     width: 100%;
-    max-width: 900px;
+    max-width: 720px;
     margin: auto 0;
     display: flex;
     flex-direction: column;
@@ -135,16 +135,16 @@
 
   .floating-controls {
     position: fixed;
-    bottom: 16px;
-    right: 20px;
+    bottom: 14px;
+    right: 18px;
     display: flex;
-    gap: 10px;
+    gap: 8px;
     z-index: 20;
   }
 
   .float-btn {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -155,8 +155,8 @@
   }
 
   .float-btn:hover {
-    transform: scale(1.1) rotate(15deg);
+    transform: scale(1.08) rotate(12deg);
     background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 </style>
