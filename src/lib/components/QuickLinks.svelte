@@ -49,7 +49,7 @@
   }
 </script>
 
-<div class="quicklinks-container animate-fade-in">
+<div class="quicklinks-container animate-reveal delay-4">
   <div class="grid">
     {#each links as link (link.id)}
       <div class="card-wrapper">

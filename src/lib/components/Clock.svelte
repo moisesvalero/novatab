@@ -31,20 +31,22 @@
   let displaySeconds = $derived(seconds.toString().padStart(2, '0'));
   let ampm = $derived(hours >= 12 ? 'PM' : 'AM');
 
-  let dateFormatted = $derived(
-    time.toLocaleDateString('es-ES', {
+  // Exact Bonjourr style: "Jueves, 13 de agosto"
+  let dateFormatted = $derived(() => {
+    const raw = time.toLocaleDateString('es-ES', {
       weekday: 'long',
       day: 'numeric',
       month: 'long'
-    })
-  );
+    });
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  });
 
   let hourDeg = $derived((hours % 12 + minutes / 60) * 30);
   let minDeg = $derived((minutes + seconds / 60) * 6);
   let secDeg = $derived(seconds * 6);
 </script>
 
-<div class="clock-widget animate-fade-in">
+<div class="clock-widget animate-reveal delay-1">
   {#if settings.clockType === 'digital'}
     <div class="digital-clock">
       <h1 class="time-display">
@@ -71,7 +73,7 @@
   {/if}
 
   {#if settings.showDate}
-    <p class="date-display">{dateFormatted}</p>
+    <p class="date-display">{dateFormatted()}</p>
   {/if}
 </div>
 
@@ -82,15 +84,15 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-bottom: 0.4rem;
-    text-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    margin-bottom: 0.8rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
   }
 
   .time-display {
-    font-size: clamp(3.4rem, 7vw, 5.4rem);
-    font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 1;
+    font-size: clamp(3.8rem, 8vw, 6.2rem);
+    font-weight: 200; /* Apple/Bonjourr thin elegant weight */
+    letter-spacing: -0.04em;
+    line-height: 0.95;
     color: #ffffff;
     display: flex;
     align-items: baseline;
@@ -99,24 +101,25 @@
   }
 
   .colon {
-    opacity: 0.85;
+    opacity: 0.8;
+    font-weight: 200;
+    margin: 0 -1px;
     animation: pulse 2s infinite ease-in-out;
   }
 
   .ampm {
-    font-size: 0.32em;
-    font-weight: 500;
+    font-size: 0.3em;
+    font-weight: 400;
     margin-left: 8px;
     opacity: 0.8;
   }
 
   .date-display {
-    font-size: clamp(0.88rem, 1.8vw, 1.15rem);
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.85);
-    margin-top: 0.2rem;
-    text-transform: capitalize;
-    letter-spacing: 0.02em;
+    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 0.4rem;
+    letter-spacing: 0.01em;
   }
 
   /* Analog Clock */
@@ -182,6 +185,6 @@
 
   @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.35; }
   }
 </style>

@@ -106,7 +106,7 @@
   });
 </script>
 
-<div class="search-container animate-fade-in">
+<div class="search-container animate-reveal delay-3">
   <form onsubmit={handleSubmit} class="search-form {isFocused ? 'focused' : ''}">
     <div class="search-icon-wrapper">
       <Search size={18} class="search-icon" />
@@ -156,7 +156,7 @@
   .search-container {
     position: relative;
     width: 100%;
-    max-width: 540px;
+    max-width: 520px;
     margin: 0 auto 1.4rem auto;
     z-index: 20;
   }
@@ -167,24 +167,24 @@
     width: 100%;
     height: 48px;
     padding: 0 10px 0 16px;
-    background: rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 24px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .search-form:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.38);
   }
 
   .search-form.focused {
-    background: rgba(255, 255, 255, 0.28);
-    border-color: rgba(56, 189, 248, 0.8);
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 10px 30px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.26);
+    border-color: rgba(56, 189, 248, 0.85);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
     transform: translateY(-1px);
   }
 
@@ -198,7 +198,7 @@
   .search-input {
     flex: 1;
     height: 100%;
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     font-weight: 500;
     color: #ffffff;
   }
@@ -231,7 +231,7 @@
   }
 
   .btn-submit:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
 
   /* Suggestions Dropdown */

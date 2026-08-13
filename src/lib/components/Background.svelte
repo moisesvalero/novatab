@@ -22,6 +22,9 @@
     class="bg-overlay" 
     style="background: rgba(0, 0, 0, {bgState.darkness / 100});"
   ></div>
+
+  <!-- Radial Vignette for Bonjourr depth -->
+  <div class="bg-vignette"></div>
 </div>
 
 <div class="footer-tags">
@@ -56,7 +59,7 @@
     pointer-events: none;
   }
 
-  .bg-image, .bg-solid, .bg-gradient, .bg-overlay {
+  .bg-image, .bg-solid, .bg-gradient, .bg-overlay, .bg-vignette {
     position: absolute;
     top: -5%;
     left: -5%;
@@ -69,6 +72,10 @@
     background-size: cover;
     background-position: center;
     transform: scale(1.05);
+  }
+
+  .bg-vignette {
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.48) 100%);
   }
 
   .footer-tags {
