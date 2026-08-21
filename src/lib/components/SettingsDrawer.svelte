@@ -92,25 +92,28 @@
           </div>
 
           <div class="row split">
-            <div>
-              <label for="tabEmoji">Icono Pestaña</label>
+            <div class="field-col">
+              <label for="tabEmoji">Icono</label>
               <input 
                 id="tabEmoji" 
                 type="text" 
-                maxLength={2}
+                maxLength={4}
+                class="emoji-input"
                 bind:value={settings.tabEmoji} 
                 oninput={() => settingsStore.set(settings)}
                 placeholder="⚡"
+                aria-label="Icono o emoji de la pestaña"
               />
             </div>
-            <div>
-              <label for="tabTitle">Título Pestaña</label>
+            <div class="field-col">
+              <label for="tabTitle">Título de Pestaña</label>
               <input 
                 id="tabTitle" 
                 type="text" 
                 bind:value={settings.tabTitle} 
                 oninput={() => settingsStore.set(settings)}
                 placeholder="NovaTab"
+                aria-label="Título de la pestaña"
               />
             </div>
           </div>
@@ -385,28 +388,56 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    width: 100%;
   }
 
   .row.split {
     display: grid;
     grid-template-columns: 80px 1fr;
     gap: 12px;
+    align-items: start;
+    width: 100%;
+  }
+
+  .field-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .emoji-input {
+    text-align: center;
+    font-size: 1.15rem;
   }
 
   label {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     font-weight: 500;
   }
 
-  input[type='text'], select {
-    padding: 10px 12px;
+  input[type='text'],
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 10px 14px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 10px;
     color: #ffffff;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+  }
+
+  input[type='text']:focus,
+  select:focus {
+    border-color: #38bdf8;
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
   }
 
   select option {

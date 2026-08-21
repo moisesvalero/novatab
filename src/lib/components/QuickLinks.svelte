@@ -340,6 +340,9 @@
   }
 
   .modal-body input {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
     padding: 11px 14px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
