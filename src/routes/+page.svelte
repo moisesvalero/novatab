@@ -136,7 +136,6 @@
     flex-direction: column;
     align-items: center;
     z-index: 10;
-    will-change: transform, opacity;
   }
 
   .floating-controls {

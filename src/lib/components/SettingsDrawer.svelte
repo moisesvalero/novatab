@@ -42,17 +42,35 @@
     a.download = 'novatab_config.json';
     a.click();
   }
+
+  function handleKeydown(e) {
+    if (e.key === 'Escape' && isOpen) {
+      close();
+    }
+  }
 </script>
 
+<svelte:window onkeydown={handleKeydown} />
+
 {#if isOpen}
-  <div class="drawer-backdrop" onclick={close}>
-    <aside class="drawer-panel glass-card animate-fade-in" onclick={(e) => e.stopPropagation()}>
+  <div 
+    class="drawer-backdrop animate-fade-in" 
+    onclick={(e) => { if (e.target === e.currentTarget) close(); }}
+    role="presentation"
+  >
+    <div 
+      class="drawer-panel glass-card animate-slide-right" 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-title"
+      tabindex="-1"
+    >
       <div class="drawer-header">
         <div class="title-box">
           <Settings size={20} class="header-icon" />
-          <h2>Ajustes de NovaTab</h2>
+          <h2 id="settings-title">Ajustes de NovaTab</h2>
         </div>
-        <button type="button" class="btn-close" onclick={close}>
+        <button type="button" class="btn-close" onclick={close} aria-label="Cerrar ajustes">
           <X size={20} />
         </button>
       </div>
@@ -285,7 +303,7 @@
           </button>
         </section>
       </div>
-    </aside>
+    </div>
   </div>
 {/if}
 

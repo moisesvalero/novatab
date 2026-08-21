@@ -2,6 +2,8 @@
   import '$lib/styles/app.css';
   import { settingsStore } from '$lib/stores/settingsStore';
 
+  let { children } = $props();
+
   let settings = $derived($settingsStore);
   let tabTitle = $derived(settings.tabTitle || 'NovaTab');
   let tabEmoji = $derived(settings.tabEmoji || '⚡');
@@ -16,4 +18,4 @@
   <meta name="description" content="NovaTab - Pestaña nueva personalizada estilo Bonjourr con buscador Google central" />
 </svelte:head>
 
-<slot />
+{@render children?.()}

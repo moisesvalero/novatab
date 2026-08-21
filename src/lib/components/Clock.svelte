@@ -31,7 +31,7 @@
   let displaySeconds = $derived(seconds.toString().padStart(2, '0'));
   let ampm = $derived(hours >= 12 ? 'PM' : 'AM');
 
-  let dateFormatted = $derived(() => {
+  let dateFormatted = $derived.by(() => {
     const raw = time.toLocaleDateString('es-ES', {
       weekday: 'long',
       day: 'numeric',
@@ -72,7 +72,7 @@
   {/if}
 
   {#if settings.showDate}
-    <p class="date-display">{dateFormatted()}</p>
+    <p class="date-display">{dateFormatted}</p>
   {/if}
 </div>
 
@@ -97,6 +97,7 @@
     align-items: baseline;
     justify-content: center;
     gap: 2px;
+    font-variant-numeric: tabular-nums;
   }
 
   .colon {

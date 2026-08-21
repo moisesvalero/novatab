@@ -9,11 +9,11 @@
   }
 </script>
 
-<div class="quotes-container animate-reveal delay-5">
+<div class="quotes-container animate-fade-in">
   <p class="quote-text">“{q.text}”</p>
   <div class="quote-author-row">
     <span class="quote-author">— {q.author}</span>
-    <button type="button" class="btn-next-quote" onclick={handleNext} title="Siguiente frase">
+    <button type="button" class="btn-next-quote" onclick={handleNext} title="Siguiente frase" aria-label="Siguiente frase">
       <RefreshCw size={11} />
     </button>
   </div>

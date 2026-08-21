@@ -3,14 +3,15 @@
   import { settingsStore } from '$lib/stores/settingsStore';
   import { fetchWeatherData } from '$lib/utils/weather';
 
-  const hour = new Date().getHours();
-
-  let greetingText = 'Buenos Días';
-  if (hour >= 12 && hour < 20) {
-    greetingText = 'Buenas Tardes';
-  } else if (hour >= 20 || hour < 6) {
-    greetingText = 'Buenas Noches';
-  }
+  let greetingText = $derived.by(() => {
+    const hour = new Date().getHours();
+    if (hour >= 12 && hour < 20) {
+      return 'Buenas Tardes';
+    } else if (hour >= 20 || hour < 6) {
+      return 'Buenas Noches';
+    }
+    return 'Buenos Días';
+  });
 
   let userName = $derived($settingsStore.userName);
   let showWeather = $derived($settingsStore.widgets.weather);

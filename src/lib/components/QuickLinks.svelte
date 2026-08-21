@@ -47,7 +47,19 @@
   function handleFaviconError(e) {
     e.target.src = 'https://www.google.com/s2/favicons?domain=google.com&sz=128';
   }
+  function handleKeydown(e) {
+    if (e.key === 'Escape' && isModalOpen) {
+      isModalOpen = false;
+    }
+  }
+
+  function handleModalSubmit(e) {
+    e.preventDefault();
+    handleSave();
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="quicklinks-container">
   <div class="grid">
@@ -73,6 +85,7 @@
             class="btn-edit" 
             onclick={(e) => openEditModal(link, e)}
             title="Editar acceso directo"
+            aria-label="Editar acceso directo {link.title}"
           >
             <Edit2 size={11} />
           </button>
@@ -80,7 +93,7 @@
       </div>
     {/each}
 
-    <button type="button" class="add-card glass-panel" onclick={openAddModal} title="Añadir acceso directo">
+    <button type="button" class="add-card glass-panel" onclick={openAddModal} title="Añadir acceso directo" aria-label="Añadir acceso directo">
       <div class="icon-box add-box">
         <Plus size={18} />
       </div>
@@ -90,47 +103,64 @@
 </div>
 
 {#if isModalOpen}
-  <div class="modal-backdrop" onclick={() => (isModalOpen = false)}>
-    <div class="modal-content glass-card" onclick={(e) => e.stopPropagation()}>
+  <div 
+    class="modal-backdrop animate-fade-in" 
+    onclick={(e) => { if (e.target === e.currentTarget) isModalOpen = false; }}
+    role="presentation"
+  >
+    <div 
+      class="modal-content glass-card animate-modal" 
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      tabindex="-1"
+    >
       <div class="modal-header">
-        <h3>{editingId ? 'Editar Acceso Directo' : 'Añadir Acceso Directo'}</h3>
-        <button type="button" class="btn-close" onclick={() => (isModalOpen = false)}>
-          <X size={16} />
+        <h3 id="modal-title">{editingId ? 'Editar Acceso Directo' : 'Añadir Acceso Directo'}</h3>
+        <button type="button" class="btn-close" onclick={() => (isModalOpen = false)} aria-label="Cerrar modal">
+          <X size={18} />
         </button>
       </div>
 
-      <div class="modal-body">
-        <label>
-          <span>Título</span>
-          <input 
-            type="text" 
-            bind:value={inputTitle} 
-            placeholder="Ej: YouTube" 
-            autocomplete="off"
-          />
-        </label>
+      <form onsubmit={handleModalSubmit}>
+        <div class="modal-body">
+          <label>
+            <span>Título</span>
+            <input 
+              type="text" 
+              bind:value={inputTitle} 
+              placeholder="Ej: YouTube" 
+              autocomplete="off"
+              required
+            />
+          </label>
 
-        <label>
-          <span>Enlace (URL)</span>
-          <input 
-            type="url" 
-            bind:value={inputUrl} 
-            placeholder="https://youtube.com" 
-            autocomplete="off"
-          />
-        </label>
-      </div>
+          <label>
+            <span>Enlace (URL)</span>
+            <input 
+              type="text" 
+              bind:value={inputUrl} 
+              placeholder="youtube.com o https://..." 
+              autocomplete="off"
+              required
+            />
+          </label>
+        </div>
 
-      <div class="modal-footer">
-        {#if editingId}
-          <button type="button" class="btn-delete" onclick={(e) => handleDelete(editingId, e)}>
-            <Trash2 size={14} /> Borrar
+        <div class="modal-footer">
+          {#if editingId}
+            <button type="button" class="btn-delete" onclick={(e) => handleDelete(editingId, e)}>
+              <Trash2 size={14} /> Borrar
+            </button>
+          {/if}
+          <button type="button" class="btn-cancel" onclick={() => (isModalOpen = false)}>
+            Cancelar
           </button>
-        {/if}
-        <button type="button" class="btn-save" onclick={handleSave}>
-          Guardar
-        </button>
-      </div>
+          <button type="submit" class="btn-save">
+            Guardar
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 {/if}
@@ -240,76 +270,89 @@
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 16px;
+    box-sizing: border-box;
   }
 
   .modal-content {
     width: 100%;
-    max-width: 380px;
-    padding: 20px;
-    background: rgba(18, 24, 38, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 18px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    padding: 24px;
+    background: rgba(18, 24, 38, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+    position: relative;
+    outline: none;
   }
 
   .modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .modal-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: #ffffff;
+    letter-spacing: -0.01em;
   }
 
   .btn-close {
     color: rgba(255, 255, 255, 0.6);
-    padding: 4px;
+    padding: 6px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
   }
 
   .btn-close:hover {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .modal-body label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 14px;
-    font-size: 0.82rem;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .modal-body span {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .modal-body input {
-    padding: 10px 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
     color: #ffffff;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
   }
 
   .modal-body input:focus {
     border-color: #38bdf8;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
   }
 
   .modal-footer {
@@ -317,38 +360,57 @@
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 22px;
+  }
+
+  .btn-cancel {
+    padding: 9px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    border-radius: 9px;
+    font-size: 0.88rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
   }
 
   .btn-save {
-    padding: 8px 16px;
+    padding: 9px 18px;
     background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
     color: #ffffff;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 9px;
     font-size: 0.88rem;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+    transition: all 0.2s ease;
   }
 
   .btn-save:hover {
     opacity: 0.95;
     transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45);
   }
 
   .btn-delete {
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 8px 14px;
-    background: rgba(239, 68, 68, 0.2);
+    padding: 9px 14px;
+    background: rgba(239, 68, 68, 0.18);
     color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.4);
+    border: 1px solid rgba(239, 68, 68, 0.35);
     font-weight: 500;
-    border-radius: 8px;
-    font-size: 0.82rem;
+    border-radius: 9px;
+    font-size: 0.84rem;
     margin-right: auto;
+    transition: all 0.2s ease;
   }
 
   .btn-delete:hover {
-    background: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.3);
   }
 </style>

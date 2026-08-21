@@ -144,10 +144,11 @@
       onfocus={() => (isFocused = true)}
       onblur={() => setTimeout(() => (isFocused = false), 150)}
       type="text"
-      placeholder="Buscar en Google o escribir URL..."
+      placeholder="Buscar en {currentEngine.name} o escribir URL..."
       autocomplete="off"
       spellcheck="false"
       class="search-input"
+      aria-label="Buscar en {currentEngine.name} o escribir URL"
     />
 
     {#if query}
@@ -156,20 +157,23 @@
       </button>
     {/if}
 
-    <button type="submit" class="btn-submit" aria-label="Buscar">
+    <button type="submit" class="btn-submit" aria-label="Buscar en {currentEngine.name}">
       <ArrowUpRight size={16} />
     </button>
   </form>
 
   {#if suggestions.length > 0 && isFocused}
-    <ul class="suggestions-list glass-card">
+    <ul class="suggestions-list glass-card" aria-label="Sugerencias de búsqueda">
       {#each suggestions as suggestion, index}
-        <li
-          class="suggestion-item {index === selectedIndex ? 'selected' : ''}"
-          onmousedown={() => executeSearch(suggestion)}
-        >
-          <Search size={13} class="suggestion-icon" />
-          <span class="suggestion-text">{suggestion}</span>
+        <li class="suggestion-wrapper">
+          <button
+            type="button"
+            class="suggestion-item {index === selectedIndex ? 'selected' : ''}"
+            onmousedown={() => executeSearch(suggestion)}
+          >
+            <Search size={13} class="suggestion-icon" />
+            <span class="suggestion-text">{suggestion}</span>
+          </button>
         </li>
       {/each}
     </ul>
@@ -277,14 +281,22 @@
     overflow: hidden;
   }
 
+  .suggestion-wrapper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .suggestion-item {
     display: flex;
     align-items: center;
+    width: 100%;
     padding: 8px 14px;
     border-radius: 10px;
     cursor: pointer;
     font-size: 0.92rem;
     color: rgba(255, 255, 255, 0.85);
+    text-align: left;
     transition: background 0.15s ease;
   }
 
