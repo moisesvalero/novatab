@@ -86,8 +86,32 @@
     inputEl?.focus();
   }
 
+  function isEditableElement(el) {
+    if (!el) return false;
+    const tagName = el.tagName;
+    return (
+      el.isContentEditable ||
+      tagName === 'INPUT' ||
+      tagName === 'TEXTAREA' ||
+      tagName === 'SELECT'
+    );
+  }
+
   function handleGlobalShortcut(e) {
-    if (e.key === '/' || (e.ctrlKey && e.key === 'k')) {
+    // Cmd+K (Mac) or Ctrl+K (Windows/Linux) explicitly focuses the search bar
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+      if (document.activeElement !== inputEl) {
+        e.preventDefault();
+        inputEl?.focus();
+      }
+      return;
+    }
+
+    // '/' alone focuses the search bar ONLY when user is not typing in an editable field
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (isEditableElement(document.activeElement) || isEditableElement(e.target)) {
+        return;
+      }
       if (document.activeElement !== inputEl) {
         e.preventDefault();
         inputEl?.focus();
