@@ -1,11 +1,6 @@
 /** @type {import("@sveltejs/kit").Handle} */
 export async function handle({ event, resolve }) {
-  const response = await resolve(event, {
-    transformPageChunk: ({ html }) => {
-      // Optimize inline scripts to type="module"
-      return html.replace(/<script(?![^>]*type=)>/gi, '<script type="module">');
-    },
-  });
+  const response = await resolve(event);
 
   response.headers.set(
     "Strict-Transport-Security",
@@ -25,7 +20,7 @@ export async function handle({ event, resolve }) {
   response.headers.set("Cross-Origin-Resource-Policy", "same-origin");
   response.headers.set(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com https://suggestqueries.google.com https://images.unsplash.com https://api.unsplash.com; frame-ancestors 'self';",
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com https://suggestqueries.google.com https://en.wikipedia.org https://duckduckgo.com https://images.unsplash.com https://api.unsplash.com; frame-ancestors 'self';",
   );
   response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
 
