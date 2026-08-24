@@ -13,15 +13,15 @@
 
 ## ✨ Características Principales
 
-| Característica | Descripción |
-| :--- | :--- |
-| 🔍 **Buscador Central Google** | Buscador prominente estilo Google con autocompletado en tiempo real y atajo de teclado (`/` o `Ctrl+K`). |
-| 🕒 **Reloj & Fecha Flexible** | Reloj Digital y Analógico (12h/24h), segundos opcionales y saludo personalizado (*"Buenos días, [Nombre]"*). |
-| 🖼️ **Fondos Dinámicos** | Galería curada de alta resolución (Unsplash), control de desenfoque (*blur*), oscurecimiento (*overlay*) y cambio en 1 clic. |
-| 🔗 **Accesos Directos Pro** | Tarjetas de marcadores visuales con favicons de alta resolución recuperados automáticamente. Modal para añadir/editar/borrar. |
-| 🌤️ **Clima en Vivo** | Conexión con Open-Meteo API sin necesidad de API Key, con geolocalización o ciudad manual. |
+| Característica                  | Descripción                                                                                                                    |
+| :------------------------------ | :----------------------------------------------------------------------------------------------------------------------------- |
+| 🔍 **Buscador Central Google**  | Buscador prominente estilo Google con autocompletado en tiempo real y atajo de teclado (`/` o `Ctrl+K`).                       |
+| 🕒 **Reloj & Fecha Flexible**   | Reloj Digital y Analógico (12h/24h), segundos opcionales y saludo personalizado (_"Buenos días, [Nombre]"_).                   |
+| 🖼️ **Fondos Dinámicos**         | Galería curada de alta resolución (Unsplash), control de desenfoque (_blur_), oscurecimiento (_overlay_) y cambio en 1 clic.   |
+| 🔗 **Accesos Directos Pro**     | Tarjetas de marcadores visuales con favicons de alta resolución recuperados automáticamente. Modal para añadir/editar/borrar.  |
+| 🌤️ **Clima en Vivo**            | Conexión con Open-Meteo API sin necesidad de API Key, con geolocalización o ciudad manual.                                     |
 | ⚙️ **Panel de Ajustes Lateral** | Cajón deslizable para alternar visibilidad de cada widget, personalizar título/emoji de pestaña y exportar configuración JSON. |
-| ⏳ **Widgets de Productividad** | Temporizador Pomodoro, Bloc de Notas rápido persistente y Frases inspiradoras del día. |
+| ⏳ **Widgets de Productividad** | Temporizador Pomodoro, Bloc de Notas rápido persistente y Frases inspiradoras del día.                                         |
 
 ---
 
@@ -71,6 +71,7 @@ graph TD
 ## 🚀 Inicio Rápido (Desarrollo Local)
 
 ### Prerrequisitos
+
 - Node.js >= 18.x
 - `pnpm` (recomendado) o `npm`
 
@@ -119,6 +120,7 @@ Este proyecto está licenciado bajo la **Licencia MIT**. Consulta el archivo [LI
 ---
 
 ## ❤️ Agradecimientos
+
 - Inspirado en el maravilloso proyecto de código abierto [Bonjourr](https://online.bonjourr.fr/).
 - Fotografías cortesía de [Unsplash](https://unsplash.com/).
 - Iconos por [Lucide Svelte](https://lucide.dev/).

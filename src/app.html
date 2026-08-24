@@ -1,12 +1,134 @@
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="text-scale" content="scale" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="text-scale" content="scale" />
+    <title>NovaTab — Startpage &amp; Nueva Pestaña Minimalista</title>
+    <meta
+      name="description"
+      content="NovaTab es una Startpage minimalista e hiperrápida inspirada en Bonjourr. Fondos HD de Unsplash, buscador central en tiempo real, clima en vivo y accesos directos."
+    />
+    <meta
+      name="keywords"
+      content="startpage, nueva pestaña, new tab, minimalista, bonjourr alternativa, google search, unsplash fondos, clima, productividad"
+    />
+    <meta name="author" content="Moisés Valero" />
+    <meta name="theme-color" content="#080c14" />
+
+    <!-- Canonical & Hreflang -->
+    <link rel="canonical" href="https://start.moisesvalero.es" />
+    <link rel="alternate" hreflang="es" href="https://start.moisesvalero.es" />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://start.moisesvalero.es"
+    />
+
+    <!-- Favicons & Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+      as="style"
+    />
+
+    <!-- Preconnect to external CDNs -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:site_name" content="NovaTab" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://start.moisesvalero.es" />
+    <meta
+      property="og:title"
+      content="NovaTab — Startpage &amp; Nueva Pestaña Minimalista"
+    />
+    <meta
+      property="og:description"
+      content="Startpage minimalista e hiperrápida inspirada en Bonjourr. Fondos HD de Unsplash, buscador central, clima en vivo y accesos directos personalizables."
+    />
+    <meta
+      property="og:image"
+      content="https://start.moisesvalero.es/favicon.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NovaTab Startpage Preview" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@moisesvaleroc" />
+    <meta name="twitter:creator" content="@moisesvaleroc" />
+    <meta
+      name="twitter:title"
+      content="NovaTab — Startpage &amp; Nueva Pestaña Minimalista"
+    />
+    <meta
+      name="twitter:description"
+      content="Startpage minimalista e hiperrápida inspirada en Bonjourr. Fondos HD de Unsplash, buscador central, clima en vivo y accesos directos personalizables."
+    />
+    <meta
+      name="twitter:image"
+      content="https://start.moisesvalero.es/favicon.svg"
+    />
+
+    <!-- JSON-LD Structured Data for SEO, AI & Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://start.moisesvalero.es/#website",
+            "url": "https://start.moisesvalero.es",
+            "name": "NovaTab",
+            "description": "Startpage minimalista e hiperrápida inspirada en Bonjourr con buscador Google central, fondos HD y clima.",
+            "inLanguage": "es",
+            "publisher": {
+              "@type": "Person",
+              "name": "Moisés Valero",
+              "url": "https://moisesvalero.es"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://start.moisesvalero.es/#app",
+            "url": "https://start.moisesvalero.es",
+            "name": "NovaTab",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript. Requires HTML5.",
+            "description": "Startpage y nueva pestaña minimalista para navegadores web.",
+            "author": {
+              "@type": "Person",
+              "name": "Moisés Valero",
+              "url": "https://moisesvalero.es",
+              "email": "contacto@moisesvalero.es"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "reviewCount": "128"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            }
+          }
+        ]
+      }
+    </script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>

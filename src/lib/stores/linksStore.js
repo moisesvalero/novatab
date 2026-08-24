@@ -1,28 +1,28 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 const DEFAULT_LINKS = [
-  { id: '1', title: 'Google', url: 'https://www.google.com' },
-  { id: '2', title: 'YouTube', url: 'https://www.youtube.com' },
-  { id: '3', title: 'GitHub', url: 'https://github.com' },
-  { id: '4', title: 'ChatGPT', url: 'https://chatgpt.com' },
-  { id: '5', title: 'Reddit', url: 'https://www.reddit.com' },
-  { id: '6', title: 'Twitter', url: 'https://x.com' },
-  { id: '7', title: 'Netflix', url: 'https://www.netflix.com' },
-  { id: '8', title: 'Amazon', url: 'https://www.amazon.es' }
+  { id: "1", title: "Google", url: "https://www.google.com" },
+  { id: "2", title: "YouTube", url: "https://www.youtube.com" },
+  { id: "3", title: "GitHub", url: "https://github.com" },
+  { id: "4", title: "ChatGPT", url: "https://chatgpt.com" },
+  { id: "5", title: "Reddit", url: "https://www.reddit.com" },
+  { id: "6", title: "Twitter", url: "https://x.com" },
+  { id: "7", title: "Netflix", url: "https://www.netflix.com" },
+  { id: "8", title: "Amazon", url: "https://www.amazon.es" },
 ];
 
 function createLinksStore() {
-  const isBrowser = typeof window !== 'undefined';
+  const isBrowser = typeof window !== "undefined";
   let initial = DEFAULT_LINKS;
 
   if (isBrowser) {
     try {
-      const saved = localStorage.getItem('novatab_links');
+      const saved = localStorage.getItem("novatab_links");
       if (saved) {
         initial = JSON.parse(saved);
       }
     } catch (e) {
-      console.error('Error loading links from localStorage', e);
+      console.error("Error loading links from localStorage", e);
     }
   }
 
@@ -30,7 +30,7 @@ function createLinksStore() {
 
   const save = (val) => {
     if (isBrowser) {
-      localStorage.setItem('novatab_links', JSON.stringify(val));
+      localStorage.setItem("novatab_links", JSON.stringify(val));
     }
   };
 
@@ -39,12 +39,12 @@ function createLinksStore() {
     addLink: (title, url) => {
       let formattedUrl = url.trim();
       if (!/^https?:\/\//i.test(formattedUrl)) {
-        formattedUrl = 'https://' + formattedUrl;
+        formattedUrl = "https://" + formattedUrl;
       }
       const newLink = {
         id: Date.now().toString(),
         title: title.trim() || new URL(formattedUrl).hostname,
-        url: formattedUrl
+        url: formattedUrl,
       };
       update((links) => {
         const updated = [...links, newLink];
@@ -55,13 +55,17 @@ function createLinksStore() {
     updateLink: (id, title, url) => {
       let formattedUrl = url.trim();
       if (!/^https?:\/\//i.test(formattedUrl)) {
-        formattedUrl = 'https://' + formattedUrl;
+        formattedUrl = "https://" + formattedUrl;
       }
       update((links) => {
         const updated = links.map((link) =>
           link.id === id
-            ? { ...link, title: title.trim() || new URL(formattedUrl).hostname, url: formattedUrl }
-            : link
+            ? {
+                ...link,
+                title: title.trim() || new URL(formattedUrl).hostname,
+                url: formattedUrl,
+              }
+            : link,
         );
         save(updated);
         return updated;
@@ -76,10 +80,10 @@ function createLinksStore() {
     },
     reset: () => {
       if (isBrowser) {
-        localStorage.removeItem('novatab_links');
+        localStorage.removeItem("novatab_links");
       }
       set(DEFAULT_LINKS);
-    }
+    },
   };
 }
 
@@ -92,7 +96,7 @@ export function getFaviconUrl(siteUrl) {
   try {
     const domain = new URL(siteUrl).hostname;
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-  } catch (e) {
+  } catch {
     return `https://www.google.com/s2/favicons?domain=google.com&sz=128`;
   }
 }

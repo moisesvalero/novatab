@@ -1,15 +1,15 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 const DEFAULT_SETTINGS = {
-  theme: 'dark', // 'dark' | 'light' | 'system'
-  clockType: 'digital', // 'digital' | 'analog'
-  clockFormat: '24h', // '24h' | '12h'
+  theme: "dark", // 'dark' | 'light' | 'system'
+  clockType: "digital", // 'digital' | 'analog'
+  clockFormat: "24h", // '24h' | '12h'
   showSeconds: false,
   showDate: true,
-  userName: '',
-  tabTitle: 'NovaTab',
-  tabEmoji: '⚡',
-  searchEngine: 'google', // 'google' | 'duckduckgo' | 'bing' | 'brave'
+  userName: "",
+  tabTitle: "NovaTab",
+  tabEmoji: "⚡",
+  searchEngine: "google", // 'google' | 'duckduckgo' | 'bing' | 'brave'
   searchInNewTab: false,
   widgets: {
     clock: true,
@@ -19,24 +19,24 @@ const DEFAULT_SETTINGS = {
     quickLinks: true,
     quotes: true,
     pomodoro: false,
-    notes: false
+    notes: false,
   },
-  weatherCity: '',
-  weatherUnit: 'celsius' // 'celsius' | 'fahrenheit'
+  weatherCity: "",
+  weatherUnit: "celsius", // 'celsius' | 'fahrenheit'
 };
 
 function createSettingsStore() {
-  const isBrowser = typeof window !== 'undefined';
+  const isBrowser = typeof window !== "undefined";
   let initial = DEFAULT_SETTINGS;
 
   if (isBrowser) {
     try {
-      const saved = localStorage.getItem('novatab_settings');
+      const saved = localStorage.getItem("novatab_settings");
       if (saved) {
         initial = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
       }
     } catch (e) {
-      console.error('Error loading settings from localStorage', e);
+      console.error("Error loading settings from localStorage", e);
     }
   }
 
@@ -46,7 +46,7 @@ function createSettingsStore() {
     subscribe,
     set: (value) => {
       if (isBrowser) {
-        localStorage.setItem('novatab_settings', JSON.stringify(value));
+        localStorage.setItem("novatab_settings", JSON.stringify(value));
       }
       set(value);
     },
@@ -54,7 +54,7 @@ function createSettingsStore() {
       update((current) => {
         const updated = fn(current);
         if (isBrowser) {
-          localStorage.setItem('novatab_settings', JSON.stringify(updated));
+          localStorage.setItem("novatab_settings", JSON.stringify(updated));
         }
         return updated;
       });
@@ -65,21 +65,21 @@ function createSettingsStore() {
           ...current,
           widgets: {
             ...current.widgets,
-            [widgetKey]: !current.widgets[widgetKey]
-          }
+            [widgetKey]: !current.widgets[widgetKey],
+          },
         };
         if (isBrowser) {
-          localStorage.setItem('novatab_settings', JSON.stringify(updated));
+          localStorage.setItem("novatab_settings", JSON.stringify(updated));
         }
         return updated;
       });
     },
     reset: () => {
       if (isBrowser) {
-        localStorage.removeItem('novatab_settings');
+        localStorage.removeItem("novatab_settings");
       }
       set(DEFAULT_SETTINGS);
-    }
+    },
   };
 }
 

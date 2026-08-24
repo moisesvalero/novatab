@@ -15,20 +15,22 @@ export async function getSearchSuggestions(query) {
         return data[1].slice(0, 6);
       }
     }
-  } catch (e) {
+  } catch {
     // Fallback if network blocked
   }
 
   // 2. Try Wikipedia AC as secondary live fallback if needed
   try {
-    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${q}&limit=6&namespace=0&format=json&origin=*`);
+    const res = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=opensearch&search=${q}&limit=6&namespace=0&format=json&origin=*`,
+    );
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data[1]) {
         return data[1].slice(0, 6);
       }
     }
-  } catch (e) {
+  } catch {
     // silent
   }
 
