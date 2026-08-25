@@ -39,6 +39,8 @@
 </script>
 
 <main class="page-main">
+  <h1 class="sr-only">NovaTab — Startpage &amp; Nueva Pestaña Minimalista</h1>
+
   <!-- Dynamic Background -->
   <Background />
 

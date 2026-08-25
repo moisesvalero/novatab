@@ -9,6 +9,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![pnpm](https://img.shields.io/badge/pnpm-11-F69220?style=for-the-badge&logo=pnpm&logoColor=white)](https://pnpm.io/)
 
+<p align="center">
+  <img src="static/og-preview.png" alt="NovaTab Preview" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" />
+</p>
+
 ---
 
 ## ✨ Características Principales
@@ -27,26 +31,7 @@
 
 ## 🎨 Vista Previa de la Interfaz
 
-```text
-+-----------------------------------------------------------------------+
-|  📷 Unsplash Background (HD)                             🌤️ 22°C Madrid|
-|                                                                       |
-|                            14:30:45                                   |
-|                  jueves, 13 de agosto de 2026                         |
-|                                                                       |
-|                      Buenas tardes, Moisés                            |
-|                                                                       |
-|     +-----------------------------------------------------------+     |
-|     | 🔍 Buscar en Google o escribir URL...            [✕]  [↗] |     |
-|     +-----------------------------------------------------------+     |
-|                                                                       |
-|     [ Google ]   [ YouTube ]   [ GitHub ]   [ ChatGPT ]   [ + ]       |
-|                                                                       |
-|                 “La simplicidad es la máxima sofisticación.”           |
-|                                                                       |
-|  📷 Bailey Zindel                                       [🖼️] [⚙️]     |
-+-----------------------------------------------------------------------+
-```
+![NovaTab Interface Preview](static/og-preview.png)
 
 ---
 
