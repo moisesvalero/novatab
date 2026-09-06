@@ -1,36 +1,14 @@
 <script>
   import { onMount } from 'svelte';
-  import { fetchWeatherData } from '$lib/utils/weather';
-  import { settingsStore } from '$lib/stores/settingsStore';
+  import { weatherStore } from '$lib/stores/weatherStore';
   import { Sun, Cloud, CloudSun, CloudRain, CloudDrizzle, CloudLightning, Snowflake, CloudFog } from '@lucide/svelte';
 
-  let weather = $state(null);
-  let loading = $state(true);
-
-  let weatherCity = $derived($settingsStore.weatherCity || 'Madrid');
-
-  async function loadWeather() {
-    loading = true;
-    if (typeof navigator !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          weather = await fetchWeatherData(pos.coords.latitude, pos.coords.longitude);
-          loading = false;
-        },
-        async () => {
-          weather = await fetchWeatherData(40.4168, -3.7038);
-          loading = false;
-        },
-        { timeout: 5000 }
-      );
-    } else {
-      weather = await fetchWeatherData(40.4168, -3.7038);
-      loading = false;
-    }
-  }
+  let weather = $derived($weatherStore.weather);
+  let loading = $derived($weatherStore.loading && !$weatherStore.weather);
+  let weatherCity = $derived($weatherStore.location?.city || 'Madrid');
 
   onMount(() => {
-    loadWeather();
+    weatherStore.init();
   });
 </script>
 

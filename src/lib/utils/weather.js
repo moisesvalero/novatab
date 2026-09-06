@@ -36,6 +36,7 @@ export async function fetchWeatherData(lat = 40.4168, lon = -3.7038) {
       code: current.weathercode,
       desc: weatherInfo.desc,
       icon: weatherInfo.icon,
+      timezone: data.timezone || "",
       tempMax: data.daily?.temperature_2m_max?.[0]
         ? Math.round(data.daily.temperature_2m_max[0])
         : null,
@@ -46,5 +47,27 @@ export async function fetchWeatherData(lat = 40.4168, lon = -3.7038) {
   } catch (e) {
     console.error("Weather fetch error", e);
     return null;
+  }
+}
+
+export async function searchCities(query) {
+  if (!query || query.trim().length < 2) return [];
+  try {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query.trim())}&count=5&language=es&format=json`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!data.results) return [];
+    return data.results.map((r) => ({
+      name: r.name,
+      admin1: r.admin1 || "",
+      country: r.country || "",
+      latitude: r.latitude,
+      longitude: r.longitude,
+      displayName: [r.name, r.admin1, r.country].filter(Boolean).join(", "),
+    }));
+  } catch (e) {
+    console.error("City search error", e);
+    return [];
   }
 }

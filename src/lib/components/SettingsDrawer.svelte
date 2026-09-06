@@ -1,12 +1,47 @@
 <script>
   import { settingsStore } from '$lib/stores/settingsStore';
   import { backgroundStore } from '$lib/stores/backgroundStore';
-  import { X, Settings, Image, RotateCcw, Download } from '@lucide/svelte';
+  import { weatherStore } from '$lib/stores/weatherStore';
+  import { searchCities } from '$lib/utils/weather';
+  import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2 } from '@lucide/svelte';
 
   let { isOpen = $bindable(false) } = $props();
 
   let settings = $derived($settingsStore);
   let bg = $derived($backgroundStore);
+  let weatherState = $derived($weatherStore);
+
+  let citySearchQuery = $state('');
+  let citySearchResults = $state([]);
+  let isSearchingCity = $state(false);
+  let searchDebounce;
+
+  function handleCitySearchInput(e) {
+    const val = e.target.value;
+    citySearchQuery = val;
+    clearTimeout(searchDebounce);
+    if (!val || val.trim().length < 2) {
+      citySearchResults = [];
+      isSearchingCity = false;
+      return;
+    }
+    isSearchingCity = true;
+    searchDebounce = setTimeout(async () => {
+      citySearchResults = await searchCities(val);
+      isSearchingCity = false;
+    }, 350);
+  }
+
+  function selectCity(city) {
+    weatherStore.setCity(city);
+    settingsStore.update((s) => ({ ...s, weatherCity: city.name }));
+    citySearchQuery = '';
+    citySearchResults = [];
+  }
+
+  function handleDetectLocation() {
+    weatherStore.requestGeolocation();
+  }
 
   function close() {
     isOpen = false;
@@ -296,6 +331,102 @@
           </label>
         </section>
 
+        <!-- CLIMA & UBICACIÓN -->
+        <section class="section">
+          <h3>Clima y Ubicación</h3>
+
+          <div class="location-status-card">
+            <div class="loc-badge-row">
+              <MapPin size={16} class="loc-icon" />
+              <span class="loc-name">
+                {weatherState.location?.city || 'Madrid'}
+                {#if weatherState.location?.country}
+                  <span class="loc-country">({weatherState.location.country})</span>
+                {/if}
+              </span>
+              <span class="mode-tag {weatherState.location?.mode || 'default'}">
+                {#if weatherState.location?.mode === 'auto'}
+                  GPS Guardado
+                {:else if weatherState.location?.mode === 'manual'}
+                  Manual
+                {:else}
+                  Por Defecto
+                {/if}
+              </span>
+            </div>
+
+            <p class="loc-description">
+              {#if weatherState.location?.mode === 'auto'}
+                Ubicación recordada permanentemente. NovaTab no volverá a solicitar permisos en cada pestaña.
+              {:else if weatherState.location?.mode === 'manual'}
+                Ciudad fijada manualmente. Las predicciones del tiempo se actualizan para esta ubicación.
+              {:else}
+                Ubicación por defecto (Madrid). Puedes elegir tu ciudad o pulsar detectar una sola vez.
+              {/if}
+            </p>
+
+            {#if weatherState.error}
+              <p class="loc-error">{weatherState.error}</p>
+            {/if}
+          </div>
+
+          <button 
+            type="button" 
+            class="btn-primary-action loc-btn"
+            onclick={handleDetectLocation}
+            disabled={weatherState.isLocating}
+          >
+            {#if weatherState.isLocating}
+              <Loader2 size={16} class="spin" />
+              <span>Detectando coordenadas...</span>
+            {:else}
+              <Locate size={16} />
+              <span>Detectar mi ubicación actual</span>
+            {/if}
+          </button>
+
+          <div class="row">
+            <label for="citySearch">O buscar otra ciudad</label>
+            <div class="city-search-box">
+              <input 
+                id="citySearch"
+                type="text" 
+                placeholder="Ej. Valencia, Barcelona, Sevilla..."
+                value={citySearchQuery}
+                oninput={handleCitySearchInput}
+                autocomplete="off"
+              />
+              {#if isSearchingCity}
+                <div class="city-search-spinner">
+                  <Loader2 size={15} class="spin" />
+                </div>
+              {/if}
+            </div>
+
+            {#if citySearchResults.length > 0}
+              <ul class="city-suggestions animate-fade-in">
+                {#each citySearchResults as cityResult}
+                  <li>
+                    <button 
+                      type="button" 
+                      class="city-suggest-item"
+                      onclick={() => selectCity(cityResult)}
+                    >
+                      <MapPin size={14} />
+                      <div class="city-suggest-info">
+                        <span class="city-suggest-name">{cityResult.name}</span>
+                        <span class="city-suggest-sub">
+                          {[cityResult.admin1, cityResult.country].filter(Boolean).join(', ')}
+                        </span>
+                      </div>
+                    </button>
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+          </div>
+        </section>
+
         <!-- EXPORT & RESET -->
         <section class="section footer-actions">
           <button type="button" class="btn-sec" onclick={exportSettings}>
@@ -525,5 +656,169 @@
     background: rgba(239, 68, 68, 0.15);
     color: #f87171;
     border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .location-status-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .loc-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  :global(.loc-icon) {
+    color: #38bdf8;
+    flex-shrink: 0;
+  }
+
+  .loc-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .loc-country {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .mode-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .mode-tag.auto {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+
+  .mode-tag.manual {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .mode-tag.default {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .loc-description {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: 6px;
+    line-height: 1.35;
+  }
+
+  .loc-error {
+    font-size: 0.78rem;
+    color: #f87171;
+    margin-top: 6px;
+  }
+
+  .loc-btn {
+    margin-bottom: 14px;
+    cursor: pointer;
+  }
+
+  .loc-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .city-search-box {
+    position: relative;
+    width: 100%;
+  }
+
+  .city-search-spinner {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+  }
+
+  .city-suggestions {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 4px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .city-suggest-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+  }
+
+  .city-suggest-item:hover {
+    background: rgba(56, 189, 248, 0.15);
+    color: #ffffff;
+  }
+
+  .city-suggest-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .city-suggest-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .city-suggest-sub {
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  :global(.spin) {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>

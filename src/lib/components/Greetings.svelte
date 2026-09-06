@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { settingsStore } from '$lib/stores/settingsStore';
-  import { fetchWeatherData } from '$lib/utils/weather';
+  import { weatherStore } from '$lib/stores/weatherStore';
 
   let greetingText = $derived.by(() => {
     const hour = new Date().getHours();
@@ -16,22 +16,10 @@
   let userName = $derived($settingsStore.userName);
   let showWeather = $derived($settingsStore.widgets.weather);
 
-  let weather = $state(null);
+  let weather = $derived($weatherStore.weather);
 
-  onMount(async () => {
-    if (typeof navigator !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          weather = await fetchWeatherData(pos.coords.latitude, pos.coords.longitude);
-        },
-        async () => {
-          weather = await fetchWeatherData(40.4168, -3.7038);
-        },
-        { timeout: 4000 }
-      );
-    } else {
-      weather = await fetchWeatherData(40.4168, -3.7038);
-    }
+  onMount(() => {
+    weatherStore.init();
   });
 </script>
 
