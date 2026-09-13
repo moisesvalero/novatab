@@ -257,6 +257,7 @@
     border-radius: 24px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
   }
 
   .search-form:hover {
@@ -264,10 +265,11 @@
     border-color: rgba(255, 255, 255, 0.38);
   }
 
+  .search-form:focus-within,
   .search-form.focused {
-    background: rgba(255, 255, 255, 0.26);
-    border-color: rgba(56, 189, 248, 0.85);
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(56, 189, 248, 0.55);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15), 0 10px 30px rgba(0, 0, 0, 0.28);
     transform: translateY(-1px);
   }
 
@@ -367,6 +369,18 @@
     font-size: 0.96rem;
     font-weight: 500;
     color: #ffffff;
+    background: transparent;
+    border: none;
+    outline: none !important;
+    box-shadow: none !important;
+    border-radius: 0;
+  }
+
+  .search-input:focus,
+  .search-input:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .search-input::placeholder {
@@ -382,6 +396,17 @@
     border-radius: 50%;
     color: rgba(255, 255, 255, 0.85);
     transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .engine-btn:focus,
+  .engine-btn:focus-visible,
+  .btn-clear:focus,
+  .btn-clear:focus-visible,
+  .btn-submit:focus,
+  .btn-submit:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 
   .btn-clear:hover {
