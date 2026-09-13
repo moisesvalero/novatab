@@ -2,8 +2,10 @@
   import { settingsStore } from '$lib/stores/settingsStore';
   import { backgroundStore } from '$lib/stores/backgroundStore';
   import { weatherStore } from '$lib/stores/weatherStore';
+  import { linksStore } from '$lib/stores/linksStore';
+  import { parseBookmarksHtml } from '$lib/utils/bookmarkParser';
   import { searchCities } from '$lib/utils/weather';
-  import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2 } from '@lucide/svelte';
+  import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2, Upload, Check, CircleAlert } from '@lucide/svelte';
 
   let { isOpen = $bindable(false) } = $props();
 
@@ -15,6 +17,85 @@
   let citySearchResults = $state([]);
   let isSearchingCity = $state(false);
   let searchDebounce;
+
+  let fileInputEl = $state(null);
+  let replaceExistingBookmarks = $state(false);
+  let importStatus = $state(null);
+  let importStatusTimer;
+
+  function triggerBookmarkFileSelect() {
+    importStatus = null;
+    fileInputEl?.click();
+  }
+
+  function handleBookmarkFileChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Limpiar para permitir seleccionar el mismo archivo de nuevo
+    e.target.value = '';
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result;
+        if (typeof content !== 'string') {
+          importStatus = {
+            type: 'error',
+            message: 'No se pudo leer el archivo seleccionado.',
+          };
+          return;
+        }
+
+        const { bookmarks } = parseBookmarksHtml(content);
+        if (bookmarks.length === 0) {
+          importStatus = {
+            type: 'error',
+            message: 'No se encontraron marcadores válidos en el archivo HTML.',
+          };
+          return;
+        }
+
+        const result = linksStore.importLinks(bookmarks, { replace: replaceExistingBookmarks });
+
+        if (replaceExistingBookmarks) {
+          importStatus = {
+            type: 'success',
+            message: `¡${result.addedCount} marcadores importados con éxito (reemplazando anteriores)!`,
+          };
+        } else {
+          const msg =
+            result.duplicatesSkipped > 0
+              ? `¡${result.addedCount} marcadores importados (+${result.duplicatesSkipped} omitidos por estar repetidos)!`
+              : `¡${result.addedCount} marcadores importados con éxito!`;
+          importStatus = {
+            type: 'success',
+            message: msg,
+          };
+        }
+
+        clearTimeout(importStatusTimer);
+        importStatusTimer = setTimeout(() => {
+          importStatus = null;
+        }, 6000);
+      } catch (err) {
+        console.error('Error importing bookmarks:', err);
+        importStatus = {
+          type: 'error',
+          message: 'Ocurrió un error al procesar el archivo de marcadores.',
+        };
+      }
+    };
+
+    reader.onerror = () => {
+      importStatus = {
+        type: 'error',
+        message: 'Error al abrir el archivo de marcadores.',
+      };
+    };
+
+    reader.readAsText(file);
+  }
 
   function handleCitySearchInput(e) {
     const val = e.target.value;
@@ -438,6 +519,50 @@
           </div>
         </section>
 
+        <!-- IMPORT BOOKMARKS -->
+        <section class="section">
+          <h3>Importar Marcadores</h3>
+          <p class="section-desc">
+            Importa tus favoritos exportados desde Chrome, Brave, Firefox, Edge o Safari con 1 clic.
+          </p>
+
+          <input 
+            type="file" 
+            accept=".html,.htm" 
+            bind:this={fileInputEl} 
+            onchange={handleBookmarkFileChange} 
+            style="display: none;" 
+            aria-hidden="true"
+          />
+
+          <button 
+            type="button" 
+            class="btn-primary-action" 
+            onclick={triggerBookmarkFileSelect}
+          >
+            <Upload size={16} /> Importar Marcadores HTML
+          </button>
+
+          <label class="toggle-item margin-top small-toggle">
+            <span>Reemplazar marcadores existentes</span>
+            <input 
+              type="checkbox" 
+              bind:checked={replaceExistingBookmarks} 
+            />
+          </label>
+
+          {#if importStatus}
+            <div class="status-banner {importStatus.type} animate-fade-in" role="status">
+              {#if importStatus.type === 'success'}
+                <Check size={16} class="banner-icon" />
+              {:else}
+                <CircleAlert size={16} class="banner-icon" />
+              {/if}
+              <span>{importStatus.message}</span>
+            </div>
+          {/if}
+        </section>
+
         <!-- EXPORT & RESET -->
         <section class="section footer-actions">
           <button type="button" class="btn-sec" onclick={exportSettings}>
@@ -634,8 +759,43 @@
     margin-top: 10px;
   }
 
-  .range-row input[type='range'] {
-    accent-color: #38bdf8;
+  .section-desc {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin: -4px 0 14px 0;
+    line-height: 1.45;
+  }
+
+  .small-toggle {
+    font-size: 0.84rem;
+    padding: 8px 12px;
+  }
+
+  .status-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+
+  .status-banner.success {
+    background: rgba(34, 197, 94, 0.16);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #4ade80;
+  }
+
+  .status-banner.error {
+    background: rgba(239, 68, 68, 0.16);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
+  }
+
+  :global(.banner-icon) {
+    flex-shrink: 0;
   }
 
   .footer-actions {

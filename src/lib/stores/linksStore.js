@@ -101,6 +101,42 @@ function createLinksStore() {
         return updated;
       });
     },
+    importLinks: (bookmarks, { replace = false } = {}) => {
+      let result = {
+        addedCount: 0,
+        totalParsed: bookmarks.length,
+        duplicatesSkipped: 0,
+      };
+      update((currentLinks) => {
+        let baseLinks = replace ? [] : [...currentLinks];
+        const existingUrls = new Set(
+          baseLinks.map((l) => l.url.toLowerCase().replace(/\/$/, "")),
+        );
+
+        const newItems = [];
+        const now = Date.now();
+
+        bookmarks.forEach((bm, i) => {
+          const norm = bm.url.toLowerCase().replace(/\/$/, "");
+          if (!replace && existingUrls.has(norm)) {
+            result.duplicatesSkipped++;
+          } else {
+            existingUrls.add(norm);
+            newItems.push({
+              id: `${now}_${i}`,
+              title: bm.title,
+              url: bm.url,
+            });
+            result.addedCount++;
+          }
+        });
+
+        const updated = [...baseLinks, ...newItems];
+        save(updated);
+        return updated;
+      });
+      return result;
+    },
     reset: () => {
       if (isBrowser) {
         localStorage.removeItem("novatab_links");
