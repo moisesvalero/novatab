@@ -78,6 +78,29 @@ function createLinksStore() {
         return updated;
       });
     },
+    reorderLinks: (sourceId, targetId) => {
+      update((links) => {
+        const fromIndex = links.findIndex((link) => link.id === sourceId);
+        if (fromIndex === -1) return links;
+
+        let toIndex;
+        if (targetId === "__end__") {
+          toIndex = links.length - 1;
+        } else {
+          toIndex = links.findIndex((link) => link.id === targetId);
+        }
+
+        if (toIndex === -1 || fromIndex === toIndex) {
+          return links;
+        }
+
+        const updated = [...links];
+        const [movedItem] = updated.splice(fromIndex, 1);
+        updated.splice(toIndex, 0, movedItem);
+        save(updated);
+        return updated;
+      });
+    },
     reset: () => {
       if (isBrowser) {
         localStorage.removeItem("novatab_links");
