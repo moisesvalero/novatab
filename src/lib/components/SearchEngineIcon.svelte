@@ -1,5 +1,5 @@
 <script>
-  import { Globe, Search } from '@lucide/svelte';
+  import { Search } from '@lucide/svelte';
 
   let { engine = 'google', size = 18, class: className = '' } = $props();
 </script>
@@ -43,6 +43,16 @@
     <path fill="#008373" d="M5 3v18l5.5-3.17 6.1 3.17 2.4-1.92V11.9l-5.6 2.1-3-4.5 4.6-2.5L13.1 3H5z"/>
     <path fill="#00BC94" d="M10.5 17.83V9.5l3 4.5 5.5-2.1v4.35l-2.4 1.92-6.1-3.17z" opacity="0.6"/>
   </svg>
+{:else if engine === 'brave'}
+  <svg 
+    viewBox="0 0 24 24" 
+    width={size} 
+    height={size} 
+    class="engine-icon brave {className}" 
+    aria-hidden="true"
+  >
+    <path fill="#FB542B" d="M19.9 7.4l-2.3-4.3c-.2-.4-.7-.6-1.1-.5l-3.3.9c-.8-.3-1.6-.3-2.4 0l-3.3-.9c-.4-.1-.9.1-1.1.5L4.1 7.4c-.2.4-.2.9 0 1.3l2.8 6.4c.2.5.6.8 1.1.8h.4l1.8 4.2c.2.4.6.7 1.1.7h1.4c.5 0 .9-.3 1.1-.7l1.8-4.2h.4c.5 0 .9-.3 1.1-.8l2.8-6.4c.2-.4.2-.9 0-1.3zM12 17.5l-2-4.5h4l-2 4.5z"/>
+  </svg>
 {:else if engine === 'yahoo'}
   <svg 
     viewBox="0 0 24 24" 
@@ -54,62 +64,6 @@
     <rect width="24" height="24" rx="6" fill="#6001D2"/>
     <path fill="#FFFFFF" d="M5.5 6h2.8l2.2 4.8L12.7 6h2.8l-3.7 7.2v4.8H9.3v-4.8L5.5 6zm11.5 0h2.4v8.2H17V6zm0 10.4h2.4v2.4H17v-2.4z"/>
   </svg>
-{:else if engine === 'brave'}
-  <svg 
-    viewBox="0 0 24 24" 
-    width={size} 
-    height={size} 
-    class="engine-icon brave {className}" 
-    aria-hidden="true"
-  >
-    <path fill="#FB542B" d="M19.9 7.4l-2.3-4.3c-.2-.4-.7-.6-1.1-.5l-3.3.9c-.8-.3-1.6-.3-2.4 0l-3.3-.9c-.4-.1-.9.1-1.1.5L4.1 7.4c-.2.4-.2.9 0 1.3l2.8 6.4c.2.5.6.8 1.1.8h.4l1.8 4.2c.2.4.6.7 1.1.7h1.4c.5 0 .9-.3 1.1-.7l1.8-4.2h.4c.5 0 .9-.3 1.1-.8l2.8-6.4c.2-.4.2-.9 0-1.3zM12 17.5l-2-4.5h4l-2 4.5z"/>
-  </svg>
-{:else if engine === 'ecosia'}
-  <svg 
-    viewBox="0 0 24 24" 
-    width={size} 
-    height={size} 
-    class="engine-icon ecosia {className}" 
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="11" fill="#008060"/>
-    <path fill="#FFFFFF" d="M12 4.5c-3 0-5.5 2.2-5.5 5 0 1.2.5 2.3 1.3 3.1-.5.7-.8 1.6-.8 2.5 0 2.1 1.9 3.9 4.3 4.1v-2.4h1.4v2.4c2.4-.2 4.3-2 4.3-4.1 0-.9-.3-1.8-.8-2.5.8-.8 1.3-1.9 1.3-3.1 0-2.8-2.5-5-5.5-5z"/>
-  </svg>
-{:else if engine === 'startpage'}
-  <svg 
-    viewBox="0 0 24 24" 
-    width={size} 
-    height={size} 
-    class="engine-icon startpage {className}" 
-    aria-hidden="true"
-  >
-    <rect width="24" height="24" rx="6" fill="#1A0DAB"/>
-    <path fill="#FFFFFF" d="M12 5.5c-3.6 0-6.5 2.9-6.5 6.5s2.9 6.5 6.5 6.5c1.6 0 3-.6 4.1-1.6l3.2 3.2 1.4-1.4-3.2-3.2c1-1.1 1.6-2.5 1.6-4.1 0-3.6-2.9-6.5-6.5-6.5zm0 2.2c2.4 0 4.3 1.9 4.3 4.3s-1.9 4.3-4.3 4.3-4.3-1.9-4.3-4.3 1.9-4.3 4.3-4.3z"/>
-  </svg>
-{:else if engine === 'qwant'}
-  <svg 
-    viewBox="0 0 24 24" 
-    width={size} 
-    height={size} 
-    class="engine-icon qwant {className}" 
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="11" fill="#5C6BC0"/>
-    <path fill="#FFFFFF" d="M12 6c-3.3 0-6 2.7-6 6 0 3.3 2.7 6 6 6 1.4 0 2.6-.5 3.6-1.3l2.4 2.3 1.4-1.4-2.3-2.4C17.5 14.6 18 13.4 18 12c0-3.3-2.7-6-6-6zm0 2.5c1.9 0 3.5 1.6 3.5 3.5s-1.6 3.5-3.5 3.5-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5z"/>
-  </svg>
-{:else if engine === 'yandex'}
-  <svg 
-    viewBox="0 0 24 24" 
-    width={size} 
-    height={size} 
-    class="engine-icon yandex {className}" 
-    aria-hidden="true"
-  >
-    <rect width="24" height="24" rx="6" fill="#FC3F1D"/>
-    <path fill="#FFFFFF" d="M13.2 18.5h-2.6v-6.2L8 6.5h2.8l1.7 4.1 1.7-4.1H17l-2.6 5.8v6.2h-1.2z"/>
-  </svg>
-{:else if engine === 'custom'}
-  <Globe size={size} class="engine-icon custom {className}" />
 {:else}
   <Search size={size} class="engine-icon fallback {className}" />
 {/if}

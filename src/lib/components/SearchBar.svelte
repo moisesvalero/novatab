@@ -17,7 +17,6 @@
 
   let engineKey = $derived($settingsStore.searchEngine || 'google');
   let currentEngine = $derived(getEngine(engineKey));
-  let customSearchUrl = $derived($settingsStore.customSearchUrl || '');
   let searchInNewTab = $derived($settingsStore.searchInNewTab);
 
   function handleInput() {
@@ -59,7 +58,7 @@
     if (/^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(q) && !q.includes(' ')) {
       targetUrl = q.startsWith('http') ? q : 'https://' + q;
     } else {
-      targetUrl = buildSearchUrl(engineKey, q, customSearchUrl);
+      targetUrl = buildSearchUrl(engineKey, q);
     }
 
     if (searchInNewTab) {

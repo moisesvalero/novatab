@@ -163,30 +163,10 @@
               <option value="google">Google (Recomendado)</option>
               <option value="duckduckgo">DuckDuckGo</option>
               <option value="bing">Bing</option>
-              <option value="yahoo">Yahoo</option>
               <option value="brave">Brave Search</option>
-              <option value="ecosia">Ecosia</option>
-              <option value="startpage">Startpage</option>
-              <option value="qwant">Qwant</option>
-              <option value="yandex">Yandex</option>
-              <option value="custom">Personalizado</option>
+              <option value="yahoo">Yahoo</option>
             </select>
           </div>
-
-          {#if settings.searchEngine === 'custom'}
-            <div class="row">
-              <label for="customSearchUrl">URL de Búsqueda Personalizada</label>
-              <input 
-                id="customSearchUrl" 
-                type="text" 
-                value={settings.customSearchUrl || ''} 
-                oninput={(e) => settingsStore.update((s) => ({ ...s, customSearchUrl: e.target.value }))}
-                placeholder="https://ejemplo.com/search?q=%s"
-                aria-label="URL de búsqueda personalizada"
-              />
-              <span class="field-hint">Usa <code>%s</code> donde deba insertarse la búsqueda.</span>
-            </div>
-          {/if}
 
           <label class="toggle-item margin-top">
             <span>Abrir búsqueda en nueva pestaña</span>
@@ -652,21 +632,6 @@
 
   .margin-top {
     margin-top: 10px;
-  }
-
-  .field-hint {
-    font-size: 0.76rem;
-    color: rgba(255, 255, 255, 0.55);
-    margin-top: 4px;
-    display: block;
-  }
-
-  .field-hint code {
-    background: rgba(255, 255, 255, 0.12);
-    padding: 1px 4px;
-    border-radius: 4px;
-    font-family: monospace;
-    color: #e2e8f0;
   }
 
   .range-row input[type='range'] {
