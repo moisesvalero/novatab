@@ -77,7 +77,7 @@ function getDailyIndex(total) {
 const DEFAULT_BG = {
   type: "image", // 'image' | 'solid' | 'gradient'
   currentIndex: getDailyIndex(CURATED_BACKGROUNDS.length),
-  blur: 0, // 0 to 25px
+  blur: 5, // 0 to 25px (default: 5px)
   darkness: 30, // 0 to 80%
   customUrl: "",
   changeFrequency: "daily", // STRICT DEFAULT: 'daily'
@@ -101,10 +101,19 @@ function createBackgroundStore() {
         if (parsed.changeFrequency === "daily") {
           parsed.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
         }
+        // Upgrade legacy 0px blur default to 5px on first visit
+        if (
+          parsed.blurVersion !== 2 &&
+          (parsed.blur === 0 || parsed.blur === undefined)
+        ) {
+          parsed.blur = 5;
+          parsed.blurVersion = 2;
+        }
         initial = { ...DEFAULT_BG, ...parsed };
       } else {
         initial = {
           ...DEFAULT_BG,
+          blur: 5,
           changeFrequency: "daily",
           currentIndex: getDailyIndex(CURATED_BACKGROUNDS.length),
         };

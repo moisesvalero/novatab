@@ -9,7 +9,8 @@ const DEFAULT_SETTINGS = {
   userName: "",
   tabTitle: "NovaTab",
   tabEmoji: "⚡",
-  searchEngine: "google", // 'google' | 'duckduckgo' | 'bing' | 'brave'
+  searchEngine: "google", // 'google' | 'duckduckgo' | 'bing' | 'yahoo' | 'brave' | 'ecosia' | 'startpage' | 'qwant' | 'yandex' | 'custom'
+  customSearchUrl: "",
   searchInNewTab: false,
   widgets: {
     clock: true,

@@ -1,25 +1,23 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { settingsStore } from '$lib/stores/settingsStore';
+  import { SEARCH_ENGINES, getEngine, buildSearchUrl } from '$lib/constants/searchEngines';
   import { getSearchSuggestions } from '$lib/utils/searchSuggest';
-  import { Search, X, ArrowUpRight } from '@lucide/svelte';
+  import SearchEngineIcon from '$lib/components/SearchEngineIcon.svelte';
+  import { Search, X, ArrowUpRight, ChevronDown, Check } from '@lucide/svelte';
 
   let query = $state('');
   let inputEl = $state(null);
+  let pickerContainerEl = $state(null);
   let suggestions = $state([]);
   let selectedIndex = $state(-1);
   let isFocused = $state(false);
+  let isPickerOpen = $state(false);
   let debounceTimer;
 
-  const SEARCH_ENGINES = {
-    google: { name: 'Google', url: 'https://www.google.com/search?q=' },
-    duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=' },
-    bing: { name: 'Bing', url: 'https://www.bing.com/search?q=' },
-    brave: { name: 'Brave', url: 'https://search.brave.com/search?q=' }
-  };
-
   let engineKey = $derived($settingsStore.searchEngine || 'google');
-  let currentEngine = $derived(SEARCH_ENGINES[engineKey] || SEARCH_ENGINES.google);
+  let currentEngine = $derived(getEngine(engineKey));
+  let customSearchUrl = $derived($settingsStore.customSearchUrl || '');
   let searchInNewTab = $derived($settingsStore.searchInNewTab);
 
   function handleInput() {
@@ -48,6 +46,7 @@
     } else if (e.key === 'Escape') {
       suggestions = [];
       selectedIndex = -1;
+      isPickerOpen = false;
       inputEl?.blur();
     }
   }
@@ -60,7 +59,7 @@
     if (/^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(q) && !q.includes(' ')) {
       targetUrl = q.startsWith('http') ? q : 'https://' + q;
     } else {
-      targetUrl = currentEngine.url + encodeURIComponent(q);
+      targetUrl = buildSearchUrl(engineKey, q, customSearchUrl);
     }
 
     if (searchInNewTab) {
@@ -83,6 +82,17 @@
     query = '';
     suggestions = [];
     selectedIndex = -1;
+    inputEl?.focus();
+  }
+
+  function togglePicker(e) {
+    e.stopPropagation();
+    isPickerOpen = !isPickerOpen;
+  }
+
+  function selectEngine(id) {
+    settingsStore.update((s) => ({ ...s, searchEngine: id }));
+    isPickerOpen = false;
     inputEl?.focus();
   }
 
@@ -119,21 +129,66 @@
     }
   }
 
+  function handleClickOutside(e) {
+    if (isPickerOpen && pickerContainerEl && !pickerContainerEl.contains(e.target)) {
+      isPickerOpen = false;
+    }
+  }
+
   onMount(() => {
     window.addEventListener('keydown', handleGlobalShortcut);
+    window.addEventListener('click', handleClickOutside);
   });
 
   onDestroy(() => {
     if (typeof window !== 'undefined') {
       window.removeEventListener('keydown', handleGlobalShortcut);
+      window.removeEventListener('click', handleClickOutside);
     }
   });
 </script>
 
 <div class="search-container">
   <form onsubmit={handleSubmit} class="search-form {isFocused ? 'focused' : ''}">
-    <div class="search-icon-wrapper">
-      <Search size={18} class="search-icon" />
+    <div class="engine-picker-wrapper" bind:this={pickerContainerEl}>
+      <button 
+        type="button" 
+        class="engine-btn" 
+        onclick={togglePicker}
+        title="Motor: {currentEngine.name} (Clic para cambiar)"
+        aria-label="Cambiar motor de búsqueda. Actual: {currentEngine.name}"
+        aria-expanded={isPickerOpen}
+        aria-haspopup="listbox"
+      >
+        <SearchEngineIcon engine={engineKey} size={18} />
+        <ChevronDown size={11} class="engine-chevron {isPickerOpen ? 'rotated' : ''}" />
+      </button>
+
+      {#if isPickerOpen}
+        <ul 
+          class="engine-menu glass-card animate-fade-in" 
+          role="listbox" 
+          aria-label="Elegir motor de búsqueda"
+        >
+          {#each Object.values(SEARCH_ENGINES) as engine}
+            <li role="presentation">
+              <button
+                type="button"
+                class="engine-option {engineKey === engine.id ? 'active' : ''}"
+                onclick={() => selectEngine(engine.id)}
+                role="option"
+                aria-selected={engineKey === engine.id}
+              >
+                <SearchEngineIcon engine={engine.id} size={16} />
+                <span class="engine-name">{engine.name}</span>
+                {#if engineKey === engine.id}
+                  <Check size={14} class="engine-check" />
+                {/if}
+              </button>
+            </li>
+          {/each}
+        </ul>
+      {/if}
     </div>
 
     <input
@@ -194,7 +249,7 @@
     align-items: center;
     width: 100%;
     height: 48px;
-    padding: 0 10px 0 16px;
+    padding: 0 10px 0 10px;
     background: rgba(255, 255, 255, 0.14);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
@@ -216,11 +271,94 @@
     transform: translateY(-1px);
   }
 
-  .search-icon-wrapper {
+  /* Engine Picker Dropdown */
+  .engine-picker-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    color: rgba(255, 255, 255, 0.8);
-    margin-right: 10px;
+    margin-right: 8px;
+    z-index: 105;
+  }
+
+  .engine-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .engine-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: scale(1.03);
+  }
+
+  :global(.engine-chevron) {
+    color: rgba(255, 255, 255, 0.7);
+    transition: transform 0.2s ease;
+  }
+
+  :global(.engine-chevron.rotated) {
+    transform: rotate(180deg);
+  }
+
+  .engine-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 175px;
+    max-height: 290px;
+    overflow-y: auto;
+    padding: 6px;
+    margin: 0;
+    list-style: none;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    z-index: 120;
+  }
+
+  .engine-option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .engine-option:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+  }
+
+  .engine-option.active {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  .engine-name {
+    flex: 1;
+    white-space: nowrap;
+  }
+
+  :global(.engine-check) {
+    color: #38bdf8;
+    margin-left: 6px;
   }
 
   .search-input {
