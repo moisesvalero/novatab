@@ -5,7 +5,7 @@
 
   let weather = $derived($weatherStore.weather);
   let loading = $derived($weatherStore.loading && !$weatherStore.weather);
-  let weatherCity = $derived($weatherStore.location?.city || 'Madrid');
+  let weatherCity = $derived($weatherStore.location?.city || '');
 
   onMount(() => {
     weatherStore.init();
@@ -13,7 +13,7 @@
 </script>
 
 {#if !loading && weather}
-  <div class="weather-widget animate-fade-in" title="{weather.desc} en {weatherCity}">
+  <div class="weather-widget animate-fade-in" title="{weather.desc}{weatherCity ? ` en ${weatherCity}` : ''}">
     <div class="weather-icon-box">
       {#if weather.icon === 'Sun'}
         <Sun size={20} class="sun-icon" />

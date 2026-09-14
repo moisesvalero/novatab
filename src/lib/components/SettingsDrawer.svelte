@@ -431,18 +431,18 @@
             <div class="loc-badge-row">
               <MapPin size={16} class="loc-icon" />
               <span class="loc-name">
-                {weatherState.location?.city || 'Madrid'}
+                {weatherState.location?.city || 'Detectando...'}
                 {#if weatherState.location?.country}
                   <span class="loc-country">({weatherState.location.country})</span>
                 {/if}
               </span>
               <span class="mode-tag {weatherState.location?.mode || 'default'}">
                 {#if weatherState.location?.mode === 'auto'}
-                  GPS Guardado
+                  Auto / GPS
                 {:else if weatherState.location?.mode === 'manual'}
                   Manual
                 {:else}
-                  Por Defecto
+                  Automático
                 {/if}
               </span>
             </div>
@@ -453,7 +453,7 @@
               {:else if weatherState.location?.mode === 'manual'}
                 Ciudad fijada manualmente. Las predicciones del tiempo se actualizan para esta ubicación.
               {:else}
-                Ubicación por defecto (Madrid). Puedes elegir tu ciudad o pulsar detectar una sola vez.
+                Ubicación detectada automáticamente. Puedes elegir otra ciudad o pulsar detectar con GPS.
               {/if}
             </p>
 

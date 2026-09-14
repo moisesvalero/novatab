@@ -1,5 +1,9 @@
 import { writable } from "svelte/store";
-import { fetchWeatherData } from "$lib/utils/weather";
+import {
+  fetchWeatherData,
+  reverseGeocode,
+  detectLocationByIp,
+} from "$lib/utils/weather";
 
 const CACHE_KEY = "novatab_weather_cache";
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutos
@@ -66,31 +70,33 @@ function createWeatherStore() {
 
   let initialized = false;
 
-  return {
+  const store = {
     subscribe,
 
     /**
      * Inicialización idempotente y silenciosa:
      * - Usa datos cacheados al instante (0ms).
+     * - Si la ubicación es por defecto o heredada de Madrid por el bug anterior, auto-detecta la ciudad real por IP/GPS.
      * - Si la caché tiene más de 30 min, refresca el clima con las coordenadas guardadas.
-     * - NUNCA activa el prompt de geolocalización automáticamente.
      */
     init: async () => {
       if (!isBrowser || initialized) return;
       initialized = true;
 
+      let permState = "unknown";
       // Consultar estado de permisos de forma pasiva sin activar avisos
       if (navigator.permissions && navigator.permissions.query) {
         try {
           const status = await navigator.permissions.query({
             name: "geolocation",
           });
+          permState = status.state;
           update((s) => ({ ...s, permission: status.state }));
           status.onchange = () => {
             update((s) => ({ ...s, permission: status.state }));
           };
         } catch {
-          // Algunos navegadores no admiten la consulta de geolocalización
+          // Algunos navegadores no admiten la consulta pasiva de geolocalización
         }
       }
 
@@ -100,6 +106,48 @@ function createWeatherStore() {
         currentState = val;
       });
       unsubscribe();
+
+      // Si el modo es 'default' o tiene Madrid residual por el bug anterior (y no fue fijado manualmente):
+      const needsLocationCorrection =
+        currentState.location?.mode === "default" ||
+        (currentState.location?.mode === "auto" &&
+          currentState.location?.city === "Madrid");
+
+      if (needsLocationCorrection) {
+        if (permState === "granted" && navigator.geolocation) {
+          // Si el usuario ya dio permiso GPS, resolver ubicación precisa inmediatamente
+          store.requestGeolocation();
+          return;
+        }
+
+        // Si no hay GPS explícito, detectar pasivamente por IP (detecta Alcoy de inmediato)
+        const ipLocation = await detectLocationByIp();
+        if (ipLocation) {
+          const weather = await fetchWeatherData(
+            ipLocation.lat,
+            ipLocation.lon,
+          );
+          const now = Date.now();
+          update((s) => {
+            const next = {
+              ...s,
+              location: {
+                lat: ipLocation.lat,
+                lon: ipLocation.lon,
+                city: ipLocation.city,
+                country: ipLocation.country || "España",
+                mode: "auto",
+              },
+              weather: weather || s.weather,
+              lastUpdated: now,
+              error: null,
+            };
+            saveCache(next);
+            return next;
+          });
+          return;
+        }
+      }
 
       const isStale =
         !currentState.weather ||
@@ -129,8 +177,8 @@ function createWeatherStore() {
     },
 
     /**
-     * Acción explícita solicitada por el usuario (ej. clic en "Detectar mi ubicación").
-     * Pide permiso, obtiene coordenadas, guarda y actualiza el clima.
+     * Acción explícita solicitada por el usuario (ej. clic en "Detectar mi ubicación")
+     * o llamada interna si el permiso GPS ya estaba concedido.
      */
     requestGeolocation: () => {
       if (!isBrowser || !navigator.geolocation) {
@@ -148,20 +196,20 @@ function createWeatherStore() {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
 
-          // Obtener datos del clima
-          const weather = await fetchWeatherData(lat, lon);
+          // Obtener datos del clima y geocodificación inversa real en paralelo
+          const [weather, geoInfo] = await Promise.all([
+            fetchWeatherData(lat, lon),
+            reverseGeocode(lat, lon),
+          ]);
 
-          let cityName = "Ubicación actual";
-          if (weather?.timezone) {
-            const parts = weather.timezone.split("/");
-            cityName = parts[parts.length - 1].replace(/_/g, " ");
-          }
+          const cityName = geoInfo?.city || "Ubicación actual";
+          const countryName = geoInfo?.country || "";
 
           const newLocation = {
             lat,
             lon,
             city: cityName,
-            country: "",
+            country: countryName,
             mode: "auto",
           };
 
@@ -256,6 +304,8 @@ function createWeatherStore() {
       });
     },
   };
+
+  return store;
 }
 
 export const weatherStore = createWeatherStore();

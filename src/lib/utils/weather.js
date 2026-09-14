@@ -71,3 +71,99 @@ export async function searchCities(query) {
     return [];
   }
 }
+
+/**
+ * Realiza geocodificación inversa para obtener el nombre real del municipio/ciudad
+ * a partir de coordenadas GPS (ej. coordenadas de Alcoy devuelven 'Alcoy').
+ */
+export async function reverseGeocode(lat, lon) {
+  if (lat == null || lon == null) return null;
+
+  // 1. BigDataCloud Client API (rápido, sin autenticación, en español)
+  try {
+    const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=es`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const city =
+        data.locality || data.city || data.principalSubdivision || "";
+      const country = data.countryName || "";
+      if (city) {
+        return {
+          city,
+          country,
+          province: data.principalSubdivision || "",
+        };
+      }
+    }
+  } catch (e) {
+    console.warn("Error en reverseGeocode BigDataCloud:", e);
+  }
+
+  // 2. Fallback con OpenStreetMap Nominatim
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=es`;
+    const res = await fetch(url, {
+      headers: { "Accept-Language": "es" },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const addr = data.address || {};
+      const cityRaw =
+        addr.town ||
+        addr.city ||
+        addr.village ||
+        addr.municipality ||
+        addr.county ||
+        "";
+      const city = cityRaw.includes("/")
+        ? cityRaw.split("/")[0].trim()
+        : cityRaw;
+      if (city) {
+        return {
+          city,
+          country: addr.country || "",
+          province: addr.province || addr.state || "",
+        };
+      }
+    }
+  } catch (e) {
+    console.warn("Error en reverseGeocode Nominatim:", e);
+  }
+
+  return null;
+}
+
+/**
+ * Detecta pasivamente la ubicación del usuario mediante su conexión IP
+ * sin necesidad de solicitar permisos GPS en el navegador.
+ */
+export async function detectLocationByIp() {
+  try {
+    const url =
+      "https://api.bigdatacloud.net/data/reverse-geocode-client?localityLanguage=es";
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const city =
+        data.locality || data.city || data.principalSubdivision || "";
+      const lat = data.latitude;
+      const lon = data.longitude;
+      const country = data.countryName || "";
+
+      if (city && lat != null && lon != null) {
+        return {
+          lat,
+          lon,
+          city,
+          country,
+          province: data.principalSubdivision || "",
+        };
+      }
+    }
+  } catch (e) {
+    console.warn("Error al detectar ubicación por IP:", e);
+  }
+
+  return null;
+}
