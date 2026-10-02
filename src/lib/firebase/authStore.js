@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from "firebase/auth";
 import { auth, googleProvider } from "./config";
 
 function createAuthStore() {
@@ -12,6 +12,26 @@ function createAuthStore() {
   });
 
   if (isBrowser) {
+    // Check if user is returning from a redirect login
+    getRedirectResult(auth)
+      .then((res) => {
+        if (res?.user) {
+          set({
+            user: {
+              uid: res.user.uid,
+              email: res.user.email,
+              displayName: res.user.displayName,
+              photoURL: res.user.photoURL,
+            },
+            loading: false,
+            error: null,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Redirect auth result error:", err);
+      });
+
     onAuthStateChanged(
       auth,
       (user) => {
@@ -40,20 +60,32 @@ function createAuthStore() {
     signInWithGoogle: async () => {
       try {
         update((s) => ({ ...s, loading: true, error: null }));
+        // Try popup first
         const result = await signInWithPopup(auth, googleProvider);
         return result.user;
       } catch (err) {
-        console.error("Firebase Auth Error Full Details:", err);
-        let userFriendlyMsg = "Error al conectar con Google.";
+        console.warn("Popup sign-in failed, attempting redirect fallback...", err);
+        // If popup fails due to internal-error (third-party cookies/iframe blocked) or blocked popup, redirect seamlessly
+        if (
+          err.code === "auth/internal-error" ||
+          err.code === "auth/popup-blocked" ||
+          err.message?.includes("internal-error")
+        ) {
+          try {
+            await signInWithRedirect(auth, googleProvider);
+            return;
+          } catch (redirectErr) {
+            console.error("Redirect sign-in error:", redirectErr);
+            update((s) => ({ ...s, loading: false, error: redirectErr.message }));
+            throw redirectErr;
+          }
+        }
 
-        if (err.code === "auth/popup-blocked") {
-          userFriendlyMsg = "El navegador bloqueó la ventana emergente. Por favor, permítela para iniciar sesión.";
-        } else if (err.code === "auth/popup-closed-by-user") {
-          userFriendlyMsg = "Ventana de autenticación cerrada antes de completar el acceso.";
+        let userFriendlyMsg = "Error al conectar con Google.";
+        if (err.code === "auth/popup-closed-by-user") {
+          userFriendlyMsg = "Ventana de inicio de sesión cerrada.";
         } else if (err.code === "auth/unauthorized-domain") {
-          userFriendlyMsg = "Este dominio aún no está autorizado en la consola de Firebase.";
-        } else if (err.code === "auth/internal-error" || err.message?.includes("internal-error")) {
-          userFriendlyMsg = "La ventana de Google se cerró o tu navegador bloqueó las cookies de terceros de Google. Revisa si tienes un bloqueador estricto o prueba en otra pestaña.";
+          userFriendlyMsg = "Dominio no autorizado en Firebase.";
         } else if (err.message) {
           userFriendlyMsg = err.message;
         }
