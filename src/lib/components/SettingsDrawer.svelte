@@ -332,7 +332,7 @@
 
           <!-- Theme Selector -->
           <div class="row">
-            <label>Apariencia</label>
+            <span class="field-label">Apariencia</span>
             <div class="theme-picker" role="group" aria-label="Seleccionar apariencia">
               <button
                 type="button"
@@ -837,7 +837,8 @@
     font-size: 1.15rem;
   }
 
-  label {
+  label,
+  .field-label {
     font-size: 0.85rem;
     color: var(--color-text-muted);
     font-weight: 500;
