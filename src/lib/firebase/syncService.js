@@ -98,7 +98,9 @@ function createSyncService() {
     // Timeout de seguridad: asegura que la interfaz no quede atascada en "syncing" si la red demora
     safetySyncTimeout = setTimeout(() => {
       syncStatus.update((s) =>
-        s.status === "syncing" ? { ...s, status: "synced", lastSyncedAt: new Date() } : s,
+        s.status === "syncing"
+          ? { ...s, status: "synced", lastSyncedAt: new Date() }
+          : s,
       );
     }, 2500);
 
@@ -112,19 +114,25 @@ function createSyncService() {
           const data = docSnap.data();
           isApplyingRemoteChange = true;
           try {
-            if (data.settings) settingsStore.set(data.settings);
-            if (data.links) linksStore.set(data.links);
-            if (data.background) backgroundStore.set(data.background);
-            if (typeof data.notes === "string") notesStore.set(data.notes);
-
+            if (data.settings && typeof settingsStore?.set === "function")
+              settingsStore.set(data.settings);
+            if (data.links && typeof linksStore?.set === "function")
+              linksStore.set(data.links);
+            if (data.background && typeof backgroundStore?.set === "function")
+              backgroundStore.set(data.background);
+            if (
+              typeof data.notes === "string" &&
+              typeof notesStore?.set === "function"
+            )
+              notesStore.set(data.notes);
+          } catch (err) {
+            console.error("Error applying remote data:", err);
+          } finally {
             syncStatus.set({
               status: "synced",
               lastSyncedAt: new Date(),
               error: null,
             });
-          } catch (err) {
-            console.error("Error applying remote data:", err);
-          } finally {
             // Margen para que los suscriptores locales de Svelte completen su ciclo
             setTimeout(() => {
               isApplyingRemoteChange = false;

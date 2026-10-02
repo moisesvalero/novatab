@@ -137,6 +137,10 @@ function createLinksStore() {
       });
       return result;
     },
+    set: (val) => {
+      save(val);
+      set(val);
+    },
     reset: () => {
       if (isBrowser) {
         localStorage.removeItem("novatab_links");
