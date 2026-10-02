@@ -12,10 +12,16 @@ function createAuthStore() {
   });
 
   if (isBrowser) {
+    // Safety timeout: Never leave loading stuck if Firebase connection is slow or blocked
+    const safetyTimeout = setTimeout(() => {
+      update((s) => (s.loading ? { ...s, loading: false } : s));
+    }, 2500);
+
     // Check if user is returning from a redirect login
     getRedirectResult(auth)
       .then((res) => {
         if (res?.user) {
+          clearTimeout(safetyTimeout);
           set({
             user: {
               uid: res.user.uid,
@@ -29,12 +35,15 @@ function createAuthStore() {
         }
       })
       .catch((err) => {
+        clearTimeout(safetyTimeout);
         console.error("Redirect auth result error:", err);
+        update((s) => ({ ...s, loading: false, error: err.message }));
       });
 
     onAuthStateChanged(
       auth,
       (user) => {
+        clearTimeout(safetyTimeout);
         set({
           user: user
             ? {
@@ -49,6 +58,7 @@ function createAuthStore() {
         });
       },
       (error) => {
+        clearTimeout(safetyTimeout);
         console.error("Auth state change error:", error);
         update((s) => ({ ...s, loading: false, error: error.message }));
       },
