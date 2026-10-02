@@ -4,7 +4,7 @@
   import { weatherStore } from '$lib/stores/weatherStore';
   import { linksStore } from '$lib/stores/linksStore';
   import { authStore } from '$lib/firebase/authStore';
-  import { syncService } from '$lib/firebase/syncService';
+  import { syncService, syncStatus } from '$lib/firebase/syncService';
   import { parseBookmarksHtml } from '$lib/utils/bookmarkParser';
   import { searchCities } from '$lib/utils/weather';
   import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2, Upload, Check, CircleAlert, Cloud, LogIn, LogOut, RefreshCw } from '@lucide/svelte';
@@ -16,7 +16,7 @@
   let weatherState = $derived($weatherStore);
 
   let authState = $derived($authStore);
-  let syncState = $derived($syncService.syncStatus);
+  let syncState = $derived($syncStatus);
   let authActionLoading = $state(false);
   let authErrorMsg = $state('');
 
@@ -237,12 +237,12 @@
             Sincroniza tus marcadores, fondos, notas y configuración en todos tus navegadores y dispositivos.
           </p>
 
-          {#if authState.loading}
+          {#if authState?.loading}
             <div class="auth-loading-box">
               <Loader2 size={18} class="spin-icon" />
               <span>Comprobando sesión...</span>
             </div>
-          {:else if authState.user}
+          {:else if authState?.user}
             <div class="user-profile-card">
               {#if authState.user.photoURL}
                 <img src={authState.user.photoURL} alt={authState.user.displayName || 'Avatar'} class="user-avatar" />
@@ -258,14 +258,14 @@
             </div>
 
             <!-- Sync status banner -->
-            <div class="sync-status-bar {syncState.status}">
-              {#if syncState.status === 'syncing'}
+            <div class="sync-status-bar {syncState?.status || 'idle'}">
+              {#if syncState?.status === 'syncing'}
                 <RefreshCw size={14} class="spin-icon" />
                 <span>Sincronizando cambios con la nube...</span>
-              {:else if syncState.status === 'synced'}
+              {:else if syncState?.status === 'synced'}
                 <Check size={14} />
                 <span>Todo sincronizado en la nube</span>
-              {:else if syncState.status === 'error'}
+              {:else if syncState?.status === 'error'}
                 <CircleAlert size={14} />
                 <span>Error de sincronización</span>
               {:else}

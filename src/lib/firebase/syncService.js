@@ -7,15 +7,15 @@ import { linksStore } from "$lib/stores/linksStore";
 import { backgroundStore } from "$lib/stores/backgroundStore";
 import { notesStore } from "$lib/stores/notesStore";
 
+// Estado público de sincronización
+export const syncStatus = writable({
+  status: "idle", // 'idle' | 'syncing' | 'synced' | 'error'
+  lastSyncedAt: null,
+  error: null,
+});
+
 function createSyncService() {
   const isBrowser = typeof window !== "undefined";
-
-  // Estado público de sincronización
-  const syncStatus = writable({
-    status: "idle", // 'idle' | 'syncing' | 'synced' | 'error'
-    lastSyncedAt: null,
-    error: null,
-  });
 
   let unsubscribeFirestore = null;
   let isApplyingRemoteChange = false;
@@ -146,7 +146,6 @@ function createSyncService() {
   }
 
   return {
-    syncStatus: { subscribe: syncStatus.subscribe },
     init,
     forcePush: async () => {
       const currentAuth = get(authStore);

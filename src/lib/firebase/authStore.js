@@ -1,5 +1,11 @@
 import { writable } from "svelte/store";
-import { onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
+} from "firebase/auth";
 import { auth, googleProvider } from "./config";
 
 function createAuthStore() {
@@ -69,12 +75,15 @@ function createAuthStore() {
     subscribe,
     signInWithGoogle: async () => {
       try {
-        update((s) => ({ ...s, loading: true, error: null }));
+        update((s) => ({ ...s, error: null }));
         // Try popup first
         const result = await signInWithPopup(auth, googleProvider);
         return result.user;
       } catch (err) {
-        console.warn("Popup sign-in failed, attempting redirect fallback...", err);
+        console.warn(
+          "Popup sign-in failed, attempting redirect fallback...",
+          err,
+        );
         // If popup fails due to internal-error (third-party cookies/iframe blocked) or blocked popup, redirect seamlessly
         if (
           err.code === "auth/internal-error" ||
@@ -86,7 +95,7 @@ function createAuthStore() {
             return;
           } catch (redirectErr) {
             console.error("Redirect sign-in error:", redirectErr);
-            update((s) => ({ ...s, loading: false, error: redirectErr.message }));
+            update((s) => ({ ...s, error: redirectErr.message }));
             throw redirectErr;
           }
         }
@@ -96,21 +105,22 @@ function createAuthStore() {
           userFriendlyMsg = "Ventana de inicio de sesión cerrada.";
         } else if (err.code === "auth/unauthorized-domain") {
           userFriendlyMsg = "Dominio no autorizado en Firebase.";
+        } else if (err.code === "auth/network-request-failed") {
+          userFriendlyMsg = "Error de red al conectar con Firebase.";
         } else if (err.message) {
           userFriendlyMsg = err.message;
         }
 
-        update((s) => ({ ...s, loading: false, error: userFriendlyMsg }));
+        update((s) => ({ ...s, error: userFriendlyMsg }));
         throw new Error(userFriendlyMsg);
       }
     },
     logout: async () => {
       try {
-        update((s) => ({ ...s, loading: true }));
         await signOut(auth);
       } catch (err) {
         console.error("Error signing out:", err);
-        update((s) => ({ ...s, loading: false, error: err.message }));
+        update((s) => ({ ...s, error: err.message }));
         throw err;
       }
     },

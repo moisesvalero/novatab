@@ -17,7 +17,7 @@ export async function handle({ event, resolve }) {
     "Cross-Origin-Opener-Policy",
     "same-origin-allow-popups",
   );
-  response.headers.set("Cross-Origin-Resource-Policy", "same-origin");
+  response.headers.set("Cross-Origin-Resource-Policy", "cross-origin");
   response.headers.set(
     "Content-Security-Policy",
     "default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.bigdatacloud.net https://nominatim.openstreetmap.org https://suggestqueries.google.com https://en.wikipedia.org https://duckduckgo.com https://images.unsplash.com https://api.unsplash.com; frame-src 'self' https://*.firebaseapp.com https://accounts.google.com; frame-ancestors 'self';",
