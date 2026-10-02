@@ -47,18 +47,20 @@
     align-items: center;
     gap: 8px;
     padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--glass-border);
     border-radius: 9999px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    box-shadow: var(--glass-shadow);
+    color: var(--color-text-main);
     margin-bottom: 0.8rem;
     transition: all 0.2s ease;
   }
 
   .weather-widget:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
     transform: scale(1.02);
   }
 
@@ -78,13 +80,13 @@
   .temp {
     font-size: 1rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-text-main);
   }
 
   .desc {
     font-size: 0.8rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-muted);
     text-transform: capitalize;
   }
 </style>

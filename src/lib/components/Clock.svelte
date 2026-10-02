@@ -87,12 +87,16 @@
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   }
 
+  :global([data-theme="light"]) .clock-widget {
+    text-shadow: 0 2px 14px rgba(255, 255, 255, 0.8), 0 0 2px rgba(255, 255, 255, 0.9);
+  }
+
   .time-display {
     font-size: clamp(3.8rem, 8vw, 6.2rem);
     font-weight: 300;
     letter-spacing: -0.035em;
     line-height: 0.95;
-    color: #ffffff;
+    color: var(--color-text-main);
     display: flex;
     align-items: baseline;
     justify-content: center;
@@ -117,7 +121,7 @@
   .date-display {
     font-size: clamp(0.9rem, 1.8vw, 1.12rem);
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text-muted);
     margin-top: 0.35rem;
     letter-spacing: 0.01em;
   }
@@ -127,12 +131,12 @@
     width: 125px;
     height: 125px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    border: 2px solid var(--glass-border);
     position: relative;
     margin-bottom: 0.4rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--glass-shadow);
   }
 
   .analog-face {
@@ -152,21 +156,21 @@
   .hour-hand {
     width: 3.5px;
     height: 32px;
-    background: #ffffff;
+    background: var(--color-text-main);
     margin-left: -1.75px;
   }
 
   .minute-hand {
     width: 2.5px;
     height: 44px;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--color-text-muted);
     margin-left: -1.25px;
   }
 
   .second-hand {
     width: 1.5px;
     height: 48px;
-    background: #38bdf8;
+    background: var(--color-accent);
     margin-left: -0.75px;
   }
 
@@ -179,7 +183,7 @@
     margin-top: -4px;
     margin-left: -4px;
     border-radius: 50%;
-    background: #ffffff;
+    background: var(--color-text-main);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
   }
 

@@ -47,14 +47,14 @@
     justify-content: space-between;
     font-size: 0.88rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text-main);
     margin-bottom: 10px;
   }
 
   .saved-indicator {
     font-size: 0.75rem;
     font-weight: 500;
-    color: #38bdf8;
+    color: var(--color-accent);
     background: rgba(56, 189, 248, 0.15);
     padding: 2px 8px;
     border-radius: 9999px;
@@ -66,24 +66,24 @@
     resize: vertical;
     min-height: 80px;
     max-height: 260px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--input-border);
     outline: none;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--input-bg);
     border-radius: 12px;
     padding: 12px 14px;
-    color: #ffffff;
+    color: var(--color-text-main);
     font-size: 0.92rem;
     line-height: 1.45;
     transition: all 0.2s ease;
   }
 
   textarea:focus {
-    border-color: rgba(56, 189, 248, 0.6);
-    background: rgba(0, 0, 0, 0.35);
+    border-color: var(--color-accent);
+    background: var(--input-bg-focus);
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
   }
 
   textarea::placeholder {
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--input-placeholder);
   }
 </style>

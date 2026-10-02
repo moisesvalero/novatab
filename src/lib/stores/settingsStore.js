@@ -1,7 +1,8 @@
 import { writable } from "svelte/store";
 
 const DEFAULT_SETTINGS = {
-  theme: "dark", // 'dark' | 'light' | 'system'
+  theme: "system", // 'system' | 'light' | 'dark'
+  themeUserSelected: false,
   clockType: "digital", // 'digital' | 'analog'
   clockFormat: "24h", // '24h' | '12h'
   showSeconds: false,
@@ -33,7 +34,13 @@ function createSettingsStore() {
     try {
       const saved = localStorage.getItem("novatab_settings");
       if (saved) {
-        initial = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        // Migration: If theme was legacy "dark" and user never explicitly chose it,
+        // default to "system" so their OS preference is respected!
+        if (parsed.theme === "dark" && !parsed.themeUserSelected) {
+          parsed.theme = "system";
+        }
+        initial = { ...DEFAULT_SETTINGS, ...parsed };
       }
     } catch (e) {
       console.error("Error loading settings from localStorage", e);
@@ -58,6 +65,39 @@ function createSettingsStore() {
         }
         return updated;
       });
+    },
+    setTheme: (newTheme) => {
+      update((current) => {
+        const updated = {
+          ...current,
+          theme: newTheme,
+          themeUserSelected: true,
+        };
+        if (isBrowser) {
+          localStorage.setItem("novatab_settings", JSON.stringify(updated));
+        }
+        return updated;
+      });
+    },
+    cycleTheme: () => {
+      let nextTheme = "system";
+      update((current) => {
+        const cur = current.theme || "system";
+        if (cur === "system") nextTheme = "light";
+        else if (cur === "light") nextTheme = "dark";
+        else nextTheme = "system";
+
+        const updated = {
+          ...current,
+          theme: nextTheme,
+          themeUserSelected: true,
+        };
+        if (isBrowser) {
+          localStorage.setItem("novatab_settings", JSON.stringify(updated));
+        }
+        return updated;
+      });
+      return nextTheme;
     },
     toggleWidget: (widgetKey) => {
       update((current) => {

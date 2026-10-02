@@ -260,26 +260,26 @@
     width: 100%;
     height: 48px;
     padding: 0 10px 0 10px;
-    background: rgba(255, 255, 255, 0.14);
+    background: var(--glass-bg);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    border: 1px solid var(--glass-border);
     border-radius: 24px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
   }
 
   .search-form:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.38);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
   }
 
   .search-form:focus-within,
   .search-form.focused {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(56, 189, 248, 0.55);
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15), 0 10px 30px rgba(0, 0, 0, 0.28);
+    background: var(--glass-bg-hover);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15), var(--glass-shadow);
     transform: translateY(-1px);
   }
 
@@ -298,20 +298,21 @@
     gap: 4px;
     padding: 4px 6px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--color-text-main);
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
   .engine-btn:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.28);
+    background: var(--input-bg-focus);
+    border-color: var(--glass-border-hover);
     transform: scale(1.03);
   }
 
   :global(.engine-chevron) {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text-muted);
     transition: transform 0.2s ease;
   }
 
@@ -330,11 +331,11 @@
     margin: 0;
     list-style: none;
     border-radius: 14px;
-    background: rgba(15, 23, 42, 0.92);
+    background: var(--dropdown-bg);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--dropdown-border);
+    box-shadow: var(--dropdown-shadow);
     z-index: 120;
   }
 
@@ -347,19 +348,19 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text-main);
     text-align: left;
     transition: background 0.15s ease, color 0.15s ease;
   }
 
   .engine-option:hover {
-    background: rgba(255, 255, 255, 0.16);
-    color: #ffffff;
+    background: var(--dropdown-hover);
+    color: var(--color-text-main);
   }
 
   .engine-option.active {
     background: rgba(56, 189, 248, 0.2);
-    color: #38bdf8;
+    color: var(--color-accent);
     font-weight: 600;
   }
 
@@ -369,7 +370,7 @@
   }
 
   :global(.engine-check) {
-    color: #38bdf8;
+    color: var(--color-accent);
     margin-left: 6px;
   }
 
@@ -378,7 +379,7 @@
     height: 100%;
     font-size: 0.96rem;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--color-text-main);
     background: transparent;
     border: none;
     outline: none !important;
@@ -394,7 +395,7 @@
   }
 
   .search-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--input-placeholder);
   }
 
   .btn-clear, .btn-submit {
@@ -404,7 +405,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text-muted);
     transition: all 0.2s ease;
     outline: none;
   }
@@ -420,8 +421,8 @@
   }
 
   .btn-clear:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    background: var(--dropdown-hover);
+    color: var(--color-text-main);
   }
 
   .btn-submit {
@@ -445,11 +446,11 @@
     padding: 6px;
     margin: 0;
     border-radius: 16px;
-    background: rgba(15, 23, 42, 0.88);
+    background: var(--dropdown-bg);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--dropdown-border);
+    box-shadow: var(--dropdown-shadow);
     z-index: 100;
     overflow: hidden;
   }
@@ -468,18 +469,18 @@
     border-radius: 10px;
     cursor: pointer;
     font-size: 0.92rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text-main);
     text-align: left;
     transition: background 0.15s ease;
   }
 
   .suggestion-item:hover, .suggestion-item.selected {
-    background: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
+    background: var(--dropdown-hover);
+    color: var(--color-text-main);
   }
 
   :global(.suggestion-icon) {
     margin-right: 10px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-subtle);
   }
 </style>

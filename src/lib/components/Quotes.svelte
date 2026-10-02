@@ -28,11 +28,15 @@
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   }
 
+  :global([data-theme="light"]) .quotes-container {
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.8);
+  }
+
   .quote-text {
     font-size: 0.88rem;
     font-style: italic;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text-muted);
     line-height: 1.45;
     margin-bottom: 4px;
   }
@@ -47,12 +51,12 @@
   .quote-author {
     font-size: 0.76rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-subtle);
     letter-spacing: 0.02em;
   }
 
   .btn-next-quote {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-subtle);
     padding: 2px;
     border-radius: 50%;
     display: flex;
@@ -62,7 +66,7 @@
   }
 
   .btn-next-quote:hover {
-    color: #ffffff;
+    color: var(--color-text-main);
     transform: rotate(180deg);
   }
 </style>

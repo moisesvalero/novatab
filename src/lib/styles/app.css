@@ -4,10 +4,103 @@
   --font-main:
     "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
+}
+
+/* Light Theme Variables (Default / Explicit) */
+:root,
+:root[data-theme="light"] {
+  --color-bg: #f8fafc;
+  --color-bg-dark: #080c14;
+  --color-text-main: #0f172a;
+  --color-text-muted: rgba(15, 23, 42, 0.72);
+  --color-text-subtle: rgba(15, 23, 42, 0.45);
+  --color-accent: #0284c7;
+  --color-accent-hover: #0369a1;
+
+  --glass-bg: rgba(255, 255, 255, 0.76);
+  --glass-bg-hover: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --glass-border-hover: rgba(15, 23, 42, 0.22);
+  --glass-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+
+  --glass-card-bg: rgba(255, 255, 255, 0.88);
+  --glass-card-border: rgba(15, 23, 42, 0.12);
+  --glass-card-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+
+  --dropdown-bg: rgba(255, 255, 255, 0.97);
+  --dropdown-border: rgba(15, 23, 42, 0.12);
+  --dropdown-hover: rgba(15, 23, 42, 0.06);
+  --dropdown-text: #0f172a;
+  --dropdown-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+
+  --input-bg: rgba(15, 23, 42, 0.05);
+  --input-bg-focus: rgba(15, 23, 42, 0.08);
+  --input-border: rgba(15, 23, 42, 0.15);
+  --input-text: #0f172a;
+  --input-placeholder: rgba(15, 23, 42, 0.45);
+
+  --modal-bg: rgba(255, 255, 255, 0.96);
+  --modal-border: rgba(15, 23, 42, 0.14);
+  --modal-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+
+  --drawer-bg: rgba(255, 255, 255, 0.96);
+  --drawer-border: rgba(15, 23, 42, 0.12);
+  --drawer-shadow: -15px 0 40px rgba(15, 23, 42, 0.12);
+
+  --scrollbar-thumb: rgba(15, 23, 42, 0.22);
+  --scrollbar-thumb-hover: rgba(15, 23, 42, 0.4);
+
+  --tag-bg: rgba(255, 255, 255, 0.75);
+  --tag-border: rgba(15, 23, 42, 0.12);
+  --tag-text: #0f172a;
+}
+
+/* Dark Theme Variables (Explicit Overrides) */
+:root[data-theme="dark"] {
+  --color-bg: #080c14;
   --color-bg-dark: #080c14;
   --color-text-main: #ffffff;
   --color-text-muted: rgba(255, 255, 255, 0.75);
+  --color-text-subtle: rgba(255, 255, 255, 0.5);
   --color-accent: #38bdf8;
+  --color-accent-hover: #0284c7;
+
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-bg-hover: rgba(255, 255, 255, 0.22);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-border-hover: rgba(255, 255, 255, 0.35);
+  --glass-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+
+  --glass-card-bg: rgba(15, 23, 42, 0.75);
+  --glass-card-border: rgba(255, 255, 255, 0.18);
+  --glass-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+  --dropdown-bg: rgba(15, 23, 42, 0.92);
+  --dropdown-border: rgba(255, 255, 255, 0.2);
+  --dropdown-hover: rgba(255, 255, 255, 0.16);
+  --dropdown-text: rgba(255, 255, 255, 0.85);
+  --dropdown-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  --input-bg: rgba(255, 255, 255, 0.08);
+  --input-bg-focus: rgba(255, 255, 255, 0.14);
+  --input-border: rgba(255, 255, 255, 0.16);
+  --input-text: #ffffff;
+  --input-placeholder: rgba(255, 255, 255, 0.45);
+
+  --modal-bg: rgba(18, 24, 38, 0.94);
+  --modal-border: rgba(255, 255, 255, 0.22);
+  --modal-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+
+  --drawer-bg: rgba(15, 23, 42, 0.92);
+  --drawer-border: rgba(255, 255, 255, 0.15);
+  --drawer-shadow: -15px 0 40px rgba(0, 0, 0, 0.5);
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
+
+  --tag-bg: rgba(0, 0, 0, 0.3);
+  --tag-border: rgba(255, 255, 255, 0.12);
+  --tag-text: rgba(255, 255, 255, 0.7);
 }
 
 * {
@@ -21,11 +114,12 @@ body {
   width: 100%;
   height: 100%;
   font-family: var(--font-main);
-  background-color: var(--color-bg-dark);
+  background-color: var(--color-bg);
   color: var(--color-text-main);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Global Link Resets - NO UGLY BLUE/PURPLE UNDERLINES */
@@ -39,27 +133,29 @@ a:active {
 
 /* Glassmorphism utilities */
 .glass-card {
-  background: rgba(15, 23, 42, 0.75);
+  background: var(--glass-card-bg);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow);
+  color: var(--color-text-main);
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
+  color: var(--color-text-main);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--glass-shadow);
 }
 
 button {
@@ -145,11 +241,11 @@ select {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Screen Reader & Semantic SEO Utility */
