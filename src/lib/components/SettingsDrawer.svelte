@@ -267,7 +267,7 @@
                 <span>Todo sincronizado en la nube</span>
               {:else if syncState?.status === 'error'}
                 <CircleAlert size={14} />
-                <span>Error de sincronización</span>
+                <span>Error de sincronización ({syncState?.error || 'reintentando...'})</span>
               {:else}
                 <Cloud size={14} />
                 <span>Conectado a Firebase</span>

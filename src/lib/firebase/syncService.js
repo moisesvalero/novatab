@@ -7,12 +7,31 @@ import { linksStore } from "$lib/stores/linksStore";
 import { backgroundStore } from "$lib/stores/backgroundStore";
 import { notesStore } from "$lib/stores/notesStore";
 
-// Estado público de sincronización
+// Estado público reactivo de sincronización
 export const syncStatus = writable({
   status: "idle", // 'idle' | 'syncing' | 'synced' | 'error'
   lastSyncedAt: null,
   error: null,
 });
+
+/**
+ * Sanitiza recursivamente objetos y arrays para eliminar valores `undefined`,
+ * que provocan rechazos fatales en el SDK de Firestore.
+ */
+function sanitizeForFirestore(val) {
+  if (val === undefined) return null;
+  if (val === null || typeof val !== "object") return val;
+  if (Array.isArray(val)) {
+    return val.map(sanitizeForFirestore);
+  }
+  const clean = {};
+  for (const [k, v] of Object.entries(val)) {
+    if (v !== undefined) {
+      clean[k] = sanitizeForFirestore(v);
+    }
+  }
+  return clean;
+}
 
 function createSyncService() {
   const isBrowser = typeof window !== "undefined";
@@ -20,6 +39,7 @@ function createSyncService() {
   let unsubscribeFirestore = null;
   let isApplyingRemoteChange = false;
   let syncDebounceTimer = null;
+  let safetySyncTimeout = null;
 
   function init() {
     if (!isBrowser) return;
@@ -32,7 +52,7 @@ function createSyncService() {
       }
     });
 
-    // Escuchar cambios locales para subirlos con debounce de 1s
+    // Escuchar cambios locales para subirlos con debounce de 800ms
     const triggerLocalSave = () => {
       if (isApplyingRemoteChange) return;
       const currentAuth = get(authStore);
@@ -54,10 +74,10 @@ function createSyncService() {
           syncStatus.set({
             status: "error",
             lastSyncedAt: null,
-            error: err.message,
+            error: err.message || "Error al sincronizar con Firestore",
           });
         }
-      }, 1000);
+      }, 800);
     };
 
     settingsStore.subscribe(triggerLocalSave);
@@ -69,15 +89,25 @@ function createSyncService() {
   function startSync(uid) {
     if (unsubscribeFirestore) {
       unsubscribeFirestore();
+      unsubscribeFirestore = null;
     }
 
-    syncStatus.update((s) => ({ ...s, status: "syncing" }));
+    clearTimeout(safetySyncTimeout);
+    syncStatus.update((s) => ({ ...s, status: "syncing", error: null }));
+
+    // Timeout de seguridad: asegura que la interfaz no quede atascada en "syncing" si la red demora
+    safetySyncTimeout = setTimeout(() => {
+      syncStatus.update((s) =>
+        s.status === "syncing" ? { ...s, status: "synced", lastSyncedAt: new Date() } : s,
+      );
+    }, 2500);
 
     const userDocRef = doc(db, "users", uid);
 
     unsubscribeFirestore = onSnapshot(
       userDocRef,
-      (docSnap) => {
+      async (docSnap) => {
+        clearTimeout(safetySyncTimeout);
         if (docSnap.exists()) {
           const data = docSnap.data();
           isApplyingRemoteChange = true;
@@ -92,24 +122,35 @@ function createSyncService() {
               lastSyncedAt: new Date(),
               error: null,
             });
+          } catch (err) {
+            console.error("Error applying remote data:", err);
           } finally {
-            // Breve espera antes de volver a admitir sincronización local para evitar bucles
+            // Margen para que los suscriptores locales de Svelte completen su ciclo
             setTimeout(() => {
               isApplyingRemoteChange = false;
-            }, 300);
+            }, 500);
           }
         } else {
           // Si el documento en la nube no existe aún, subimos el estado local actual
-          pushLocalToCloud(uid).then(() => {
+          try {
+            await pushLocalToCloud(uid);
             syncStatus.set({
               status: "synced",
               lastSyncedAt: new Date(),
               error: null,
             });
-          });
+          } catch (err) {
+            console.error("Error creating initial cloud profile:", err);
+            syncStatus.set({
+              status: "error",
+              lastSyncedAt: null,
+              error: err.message,
+            });
+          }
         }
       },
       (err) => {
+        clearTimeout(safetySyncTimeout);
         console.error("Firestore listener error:", err);
         syncStatus.set({
           status: "error",
@@ -121,6 +162,8 @@ function createSyncService() {
   }
 
   function stopSync() {
+    clearTimeout(safetySyncTimeout);
+    clearTimeout(syncDebounceTimer);
     if (unsubscribeFirestore) {
       unsubscribeFirestore();
       unsubscribeFirestore = null;
@@ -133,7 +176,7 @@ function createSyncService() {
   }
 
   async function pushLocalToCloud(uid) {
-    const payload = {
+    const rawPayload = {
       settings: get(settingsStore),
       links: get(linksStore),
       background: get(backgroundStore),
@@ -141,6 +184,7 @@ function createSyncService() {
       updatedAt: Date.now(),
     };
 
+    const payload = sanitizeForFirestore(rawPayload);
     const userDocRef = doc(db, "users", uid);
     await setDoc(userDocRef, payload, { merge: true });
   }
@@ -150,7 +194,21 @@ function createSyncService() {
     forcePush: async () => {
       const currentAuth = get(authStore);
       if (currentAuth.user) {
-        await pushLocalToCloud(currentAuth.user.uid);
+        syncStatus.update((s) => ({ ...s, status: "syncing" }));
+        try {
+          await pushLocalToCloud(currentAuth.user.uid);
+          syncStatus.set({
+            status: "synced",
+            lastSyncedAt: new Date(),
+            error: null,
+          });
+        } catch (err) {
+          syncStatus.set({
+            status: "error",
+            lastSyncedAt: null,
+            error: err.message,
+          });
+        }
       }
     },
   };
