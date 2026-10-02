@@ -4,7 +4,6 @@
   "description": "Startpage minimalista e hiperrápida inspirada en Bonjourr",
   "start_url": "/",
   "display": "minimal-ui",
-  "background_color": "#080c14",
   "icons": [
     {
       "src": "/favicon.svg",
