@@ -131,22 +131,6 @@
       e.stopPropagation();
       return;
     }
-
-    const isStandalone = typeof window !== 'undefined' && (
-      window.navigator?.standalone === true ||
-      window.matchMedia?.('(display-mode: standalone)').matches
-    );
-
-    if (isStandalone) {
-      e.preventDefault();
-      const a = document.createElement('a');
-      a.href = e.currentTarget.href;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
   }
 
   function handleCardKeydown(e, id, index) {
@@ -238,8 +222,10 @@
       >
         <a 
           href={link.url} 
+          target="_blank"
+          rel="noopener noreferrer"
           class="link-card glass-panel" 
-          title="{link.title} (Arrastra para reordenar o Alt+Flechas)"
+          title="{link.title} (Abre en nueva pestaña)"
           onclick={handleLinkClick}
           onkeydown={(e) => handleCardKeydown(e, link.id, index)}
         >
