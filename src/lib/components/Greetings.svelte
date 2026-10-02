@@ -45,14 +45,10 @@
     align-items: center;
   }
 
-  :global([data-theme="light"]) .greeting-container {
-    text-shadow: 0 2px 14px rgba(255, 255, 255, 0.8), 0 0 2px rgba(255, 255, 255, 0.9);
-  }
-
   .greeting-text {
     font-size: clamp(1.4rem, 2.8vw, 2.1rem);
     font-weight: 500;
-    color: var(--color-text-main);
+    color: #ffffff;
     letter-spacing: -0.01em;
   }
 
@@ -63,7 +59,7 @@
   .weather-subtext {
     font-size: clamp(0.85rem, 1.5vw, 1rem);
     font-weight: 400;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.85);
     margin-top: 0.35rem;
     letter-spacing: 0.01em;
   }

@@ -6,7 +6,7 @@
   let bgUrl = $derived(bgState.customUrl || currentBg.url);
 </script>
 
-<div class="background-container" style="--darkness: {bgState.darkness};">
+<div class="background-container">
   {#if bgState.type === 'image'}
     <div 
       class="bg-image" 
@@ -18,7 +18,10 @@
     <div class="bg-gradient" style="background: {bgState.gradient};"></div>
   {/if}
 
-  <div class="bg-overlay"></div>
+  <div 
+    class="bg-overlay" 
+    style="background: rgba(0, 0, 0, {bgState.darkness / 100});"
+  ></div>
 
   <!-- Radial Vignette for depth -->
   <div class="bg-vignette"></div>
@@ -71,18 +74,6 @@
     animation: slowZoomIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  :global([data-theme="light"]) .bg-solid[style*="#0f172a"] {
-    background-color: var(--color-bg) !important;
-  }
-
-  .bg-overlay {
-    background: rgba(0, 0, 0, calc(var(--darkness, 30) / 100));
-  }
-
-  :global([data-theme="light"]) .bg-overlay {
-    background: rgba(255, 255, 255, calc(0.25 + (var(--darkness, 30) / 100) * 0.5));
-  }
-
   @keyframes slowZoomIn {
     0% {
       transform: scale(1.08);
@@ -98,10 +89,6 @@
     background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.48) 100%);
   }
 
-  :global([data-theme="light"]) .bg-vignette {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.35) 100%);
-  }
-
   .footer-tags {
     position: fixed;
     bottom: 16px;
@@ -115,13 +102,13 @@
 
   .credit-tag, .author-tag {
     font-size: 0.78rem;
-    color: var(--tag-text);
-    background: var(--tag-bg);
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 5px 12px;
     border-radius: 9999px;
-    border: 1px solid var(--tag-border);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     transition: all 0.25s ease;
   }
 
@@ -132,9 +119,9 @@
   }
 
   .credit-tag:hover, .author-tag:hover {
-    color: var(--color-text-main);
-    background: var(--glass-bg-hover);
-    border-color: var(--glass-border-hover);
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
   }
 </style>

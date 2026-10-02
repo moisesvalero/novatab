@@ -144,38 +144,34 @@
     font-weight: 600;
     padding: 6px 14px;
     border-radius: 9999px;
-    background: var(--input-bg);
-    color: var(--color-text-muted);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
     transition: all 0.2s ease;
   }
 
   .mode-btn:hover {
-    background: var(--input-bg-focus);
-    color: var(--color-text-main);
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
   }
 
   .mode-btn.active {
-    background: var(--color-accent);
-    color: #ffffff;
+    background: #38bdf8;
+    color: #080c14;
     box-shadow: 0 2px 10px rgba(56, 189, 248, 0.35);
   }
 
   .timer-display {
     font-size: 3rem;
     font-weight: 700;
-    color: var(--color-text-main);
+    color: #ffffff;
     font-variant-numeric: tabular-nums;
     margin: 6px 0 10px 0;
     letter-spacing: -0.02em;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
   }
 
-  :global([data-theme="light"]) .timer-display {
-    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.8);
-  }
-
   .text-complete {
-    color: var(--color-accent);
+    color: #38bdf8;
   }
 
   .completed-msg {

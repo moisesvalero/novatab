@@ -7,7 +7,7 @@
   import { syncService, syncStatus } from '$lib/firebase/syncService';
   import { parseBookmarksHtml } from '$lib/utils/bookmarkParser';
   import { searchCities } from '$lib/utils/weather';
-  import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2, Upload, Check, CircleAlert, Cloud, LogIn, LogOut, RefreshCw, Sun, Moon, Monitor } from '@lucide/svelte';
+  import { X, Settings, Image, RotateCcw, Download, MapPin, Locate, Loader2, Upload, Check, CircleAlert, Cloud, LogIn, LogOut, RefreshCw } from '@lucide/svelte';
 
   let { isOpen = $bindable(false) } = $props();
 
@@ -329,43 +329,6 @@
         <!-- GENERAL SECTION -->
         <section class="section">
           <h3>Personalización Principal</h3>
-
-          <!-- Theme Selector -->
-          <div class="row">
-            <span class="field-label">Apariencia</span>
-            <div class="theme-picker" role="group" aria-label="Seleccionar apariencia">
-              <button
-                type="button"
-                class="theme-opt {(settings.theme === 'system' || !settings.theme) ? 'active' : ''}"
-                onclick={() => settingsStore.setTheme('system')}
-                title="Según el sistema"
-                aria-pressed={(settings.theme === 'system' || !settings.theme) ? 'true' : 'false'}
-              >
-                <Monitor size={14} />
-                <span>Sistema</span>
-              </button>
-              <button
-                type="button"
-                class="theme-opt {settings.theme === 'light' ? 'active' : ''}"
-                onclick={() => settingsStore.setTheme('light')}
-                title="Modo claro"
-                aria-pressed={settings.theme === 'light' ? 'true' : 'false'}
-              >
-                <Sun size={14} />
-                <span>Claro</span>
-              </button>
-              <button
-                type="button"
-                class="theme-opt {settings.theme === 'dark' ? 'active' : ''}"
-                onclick={() => settingsStore.setTheme('dark')}
-                title="Modo oscuro"
-                aria-pressed={settings.theme === 'dark' ? 'true' : 'false'}
-              >
-                <Moon size={14} />
-                <span>Oscuro</span>
-              </button>
-            </div>
-          </div>
 
           <div class="row">
             <label for="userName">Tu Nombre</label>
@@ -751,12 +714,11 @@
     width: 100%;
     max-width: 440px;
     height: 100vh;
-    background: var(--drawer-bg);
-    border-left: 1px solid var(--drawer-border);
+    background: rgba(15, 23, 42, 0.92);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--drawer-shadow);
-    color: var(--color-text-main);
+    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.5);
   }
 
   .drawer-header {
@@ -764,14 +726,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 24px;
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .title-box {
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--color-text-main);
+    color: #ffffff;
   }
 
   .drawer-header h2 {
@@ -780,14 +742,14 @@
   }
 
   .btn-close {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.6);
     padding: 6px;
     border-radius: 50%;
   }
 
   .btn-close:hover {
-    color: var(--color-text-main);
-    background: var(--input-bg);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .drawer-content {
@@ -804,7 +766,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-accent);
+    color: #38bdf8;
     margin-bottom: 14px;
   }
 
@@ -837,10 +799,9 @@
     font-size: 1.15rem;
   }
 
-  label,
-  .field-label {
+  label {
     font-size: 0.85rem;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.85);
     font-weight: 500;
   }
 
@@ -850,24 +811,24 @@
     box-sizing: border-box;
     min-width: 0;
     padding: 10px 14px;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 10px;
-    color: var(--color-text-main);
+    color: #ffffff;
     font-size: 0.92rem;
     transition: all 0.2s ease;
   }
 
   input[type='text']:focus,
   select:focus {
-    border-color: var(--color-accent);
-    background: var(--input-bg-focus);
+    border-color: #38bdf8;
+    background: rgba(255, 255, 255, 0.14);
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
   }
 
   select option {
-    background: var(--color-bg);
-    color: var(--color-text-main);
+    background: #0f172a;
+    color: #ffffff;
   }
 
   .btn-primary-action {
@@ -877,10 +838,10 @@
     gap: 8px;
     width: 100%;
     padding: 12px;
-    background: var(--input-bg);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 12px;
-    color: var(--color-text-main);
+    color: #ffffff;
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 16px;
@@ -888,7 +849,7 @@
   }
 
   .btn-primary-action:hover {
-    background: var(--input-bg-focus);
+    background: rgba(255, 255, 255, 0.22);
   }
 
   .toggle-grid {
@@ -902,7 +863,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 14px;
-    background: var(--input-bg);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 10px;
     cursor: pointer;
   }
@@ -910,51 +871,16 @@
   .toggle-item input[type='checkbox'] {
     width: 18px;
     height: 18px;
-    accent-color: var(--color-accent);
+    accent-color: #38bdf8;
   }
 
   .margin-top {
     margin-top: 10px;
   }
 
-  /* Theme Picker */
-  .theme-picker {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-
-  .theme-opt {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 8px 10px;
-    border-radius: 9px;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    color: var(--color-text-muted);
-    font-size: 0.84rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .theme-opt:hover {
-    background: var(--input-bg-focus);
-    color: var(--color-text-main);
-  }
-
-  .theme-opt.active {
-    background: rgba(56, 189, 248, 0.18);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    font-weight: 600;
-  }
-
   .section-desc {
     font-size: 0.82rem;
-    color: var(--color-text-subtle);
+    color: rgba(255, 255, 255, 0.65);
     margin: -4px 0 14px 0;
     line-height: 1.45;
   }
@@ -1118,7 +1044,7 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-accent);
+    color: #38bdf8;
     display: flex;
     align-items: center;
   }
@@ -1127,13 +1053,13 @@
     list-style: none;
     margin: 6px 0 0;
     padding: 4px;
-    background: var(--dropdown-bg);
-    border: 1px solid var(--dropdown-border);
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    box-shadow: var(--dropdown-shadow);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     max-height: 200px;
     overflow-y: auto;
   }
@@ -1147,7 +1073,7 @@
     background: transparent;
     border: none;
     border-radius: 8px;
-    color: var(--color-text-main);
+    color: rgba(255, 255, 255, 0.85);
     cursor: pointer;
     text-align: left;
     transition: background 0.15s ease;
@@ -1256,8 +1182,8 @@
     align-items: center;
     gap: 12px;
     padding: 10px;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     margin: 12px 0 10px;
   }
@@ -1267,14 +1193,14 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--color-accent);
+    border: 2px solid #38bdf8;
   }
 
   .user-avatar-placeholder {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--color-accent);
+    background: #38bdf8;
     color: #0f172a;
     font-weight: bold;
     display: flex;
@@ -1292,7 +1218,7 @@
   .user-name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--color-text-main);
+    color: #ffffff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1300,7 +1226,7 @@
 
   .user-email {
     font-size: 0.78rem;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.6);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -18,12 +18,11 @@
   import { authStore } from '$lib/firebase/authStore';
   import { syncStatus } from '$lib/firebase/syncService';
 
-  import { Settings, Image, Sun, Moon, Monitor } from '@lucide/svelte';
+  import { Settings, Image, Cloud, RefreshCw } from '@lucide/svelte';
 
   let isLoaded = $state(false);
   let isSettingsOpen = $state(false);
   let widgets = $derived($settingsStore.widgets);
-  let currentTheme = $derived($settingsStore.theme || 'system');
   let authState = $derived($authStore);
   let syncState = $derived($syncStatus);
 
@@ -40,10 +39,6 @@
 
   function handleNextBg() {
     backgroundStore.nextBackground();
-  }
-
-  function handleCycleTheme() {
-    settingsStore.cycleTheme();
   }
 </script>
 
@@ -108,23 +103,6 @@
         aria-label="Cambiar fondo de pantalla"
       >
         <Image size={15} />
-      </button>
-
-      <!-- Theme Toggle -->
-      <button
-        type="button"
-        class="float-btn glass-panel"
-        onclick={handleCycleTheme}
-        title={currentTheme === 'system' ? 'Tema: Sistema (clic para cambiar)' : currentTheme === 'light' ? 'Tema: Claro (clic para cambiar)' : 'Tema: Oscuro (clic para cambiar)'}
-        aria-label="Cambiar tema de color"
-      >
-        {#if currentTheme === 'light'}
-          <Sun size={15} />
-        {:else if currentTheme === 'dark'}
-          <Moon size={15} />
-        {:else}
-          <Monitor size={15} />
-        {/if}
       </button>
 
       <button 
