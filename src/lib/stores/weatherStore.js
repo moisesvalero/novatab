@@ -180,16 +180,54 @@ function createWeatherStore() {
      * Acción explícita solicitada por el usuario (ej. clic en "Detectar mi ubicación")
      * o llamada interna si el permiso GPS ya estaba concedido.
      */
-    requestGeolocation: () => {
-      if (!isBrowser || !navigator.geolocation) {
-        update((s) => ({
-          ...s,
-          error: "La geolocalización no es compatible con este navegador",
-        }));
-        return;
-      }
+    requestGeolocation: async () => {
+      if (!isBrowser) return;
 
       update((s) => ({ ...s, isLocating: true, error: null }));
+
+      const applyIpFallback = async () => {
+        try {
+          const ipLocation = await detectLocationByIp();
+          if (ipLocation && ipLocation.city) {
+            const weather = await fetchWeatherData(ipLocation.lat, ipLocation.lon);
+            const now = Date.now();
+            update((s) => {
+              const next = {
+                ...s,
+                isLocating: false,
+                location: {
+                  lat: ipLocation.lat,
+                  lon: ipLocation.lon,
+                  city: ipLocation.city,
+                  country: ipLocation.country || "España",
+                  mode: "auto",
+                },
+                weather: weather || s.weather,
+                lastUpdated: now,
+                error: null,
+              };
+              saveCache(next);
+              return next;
+            });
+            return true;
+          }
+        } catch (e) {
+          console.warn("Fallback por IP falló:", e);
+        }
+        return false;
+      };
+
+      if (!navigator.geolocation) {
+        const ok = await applyIpFallback();
+        if (!ok) {
+          update((s) => ({
+            ...s,
+            isLocating: false,
+            error: s.location?.city ? null : "No se pudo determinar la ubicación.",
+          }));
+        }
+        return;
+      }
 
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
@@ -228,18 +266,27 @@ function createWeatherStore() {
             return next;
           });
         },
-        (err) => {
-          update((s) => ({
-            ...s,
-            isLocating: false,
-            permission: err.code === 1 ? "denied" : s.permission,
-            error:
-              err.code === 1
-                ? "Permiso de ubicación denegado en el navegador."
-                : "No se pudo determinar la ubicación actual.",
-          }));
+        async (err) => {
+          console.warn("Geolocalización por navegador falló, recurriendo a detección por IP...", err);
+          const ok = await applyIpFallback();
+          if (!ok) {
+            update((s) => ({
+              ...s,
+              isLocating: false,
+              permission: err.code === 1 ? "denied" : s.permission,
+              error: s.location?.city
+                ? null
+                : (err.code === 1
+                    ? "Permiso de ubicación denegado."
+                    : "No se pudo determinar la ubicación actual."),
+            }));
+          }
         },
-        { timeout: 10000, maximumAge: 1000 * 60 * 60 * 24 },
+        { 
+          enableHighAccuracy: false, 
+          timeout: 6000, 
+          maximumAge: 1000 * 60 * 30 
+        },
       );
     },
 

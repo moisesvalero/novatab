@@ -576,7 +576,7 @@
               {/if}
             </p>
 
-            {#if weatherState.error}
+            {#if weatherState.error && !weatherState.location?.city}
               <p class="loc-error">{weatherState.error}</p>
             {/if}
           </div>
