@@ -5,7 +5,6 @@
   "start_url": "/",
   "display": "minimal-ui",
   "background_color": "#080c14",
-  "theme_color": "#080c14",
   "icons": [
     {
       "src": "/favicon.svg",
