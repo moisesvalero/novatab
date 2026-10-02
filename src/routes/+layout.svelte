@@ -1,8 +1,14 @@
 <script>
   import '$lib/styles/app.css';
+  import { onMount } from 'svelte';
   import { settingsStore } from '$lib/stores/settingsStore';
+  import { syncService } from '$lib/firebase/syncService';
 
   let { children } = $props();
+
+  onMount(() => {
+    syncService.init();
+  });
 
   let settings = $derived($settingsStore);
   let tabTitle = $derived(

@@ -15,12 +15,16 @@
   import Pomodoro from '$lib/components/Pomodoro.svelte';
   import Notes from '$lib/components/Notes.svelte';
   import SettingsDrawer from '$lib/components/SettingsDrawer.svelte';
+  import { authStore } from '$lib/firebase/authStore';
+  import { syncService } from '$lib/firebase/syncService';
 
-  import { Settings, Image } from '@lucide/svelte';
+  import { Settings, Image, Cloud, RefreshCw } from '@lucide/svelte';
 
   let isLoaded = $state(false);
   let isSettingsOpen = $state(false);
   let widgets = $derived($settingsStore.widgets);
+  let authState = $derived($authStore);
+  let syncState = $derived($syncService.syncStatus);
 
   onMount(() => {
     // Elegant frame mount trigger
@@ -96,17 +100,22 @@
         class="float-btn glass-panel" 
         onclick={handleNextBg}
         title="Cambiar fondo de pantalla"
+        aria-label="Cambiar fondo de pantalla"
       >
         <Image size={15} />
       </button>
 
       <button 
         type="button" 
-        class="float-btn glass-panel" 
+        class="float-btn glass-panel relative-btn" 
         onclick={toggleSettings}
-        title="Ajustes de NovaTab"
+        title={authState.user ? `Conectado como ${authState.user.email} (${syncState.status})` : 'Ajustes de NovaTab'}
+        aria-label={authState.user ? `Ajustes de NovaTab. Conectado como ${authState.user.email} (${syncState.status})` : 'Ajustes de NovaTab'}
       >
         <Settings size={15} />
+        {#if authState.user}
+          <span class="sync-dot {syncState.status}" aria-hidden="true"></span>
+        {/if}
       </button>
     </div>
   {/if}
@@ -170,5 +179,43 @@
     background: rgba(255, 255, 255, 0.25);
     color: #ffffff;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .relative-btn {
+    position: relative;
+  }
+
+  .sync-dot {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid #0f172a;
+  }
+
+  .sync-dot.synced {
+    background: #4ade80;
+  }
+
+  .sync-dot.syncing {
+    background: #38bdf8;
+    animation: pulse 1s infinite;
+  }
+
+  .sync-dot.error {
+    background: #f87171;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.2);
+    }
   }
 </style>

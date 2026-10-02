@@ -185,6 +185,10 @@ function createBackgroundStore() {
         return updated;
       });
     },
+    set: (val) => {
+      save(val);
+      update(() => val);
+    },
   };
 }
 

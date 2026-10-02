@@ -1,25 +1,18 @@
 <script>
-  import { onMount } from 'svelte';
+  import { notesStore } from '$lib/stores/notesStore';
 
-  let noteText = $state('');
+  let noteText = $derived($notesStore);
   let isSaved = $state(false);
   let saveTimeout;
 
-  onMount(() => {
-    if (typeof window !== 'undefined') {
-      noteText = localStorage.getItem('novatab_notes') || '';
-    }
-  });
-
-  function handleInput() {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('novatab_notes', noteText);
-      isSaved = true;
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => {
-        isSaved = false;
-      }, 1800);
-    }
+  function handleInput(e) {
+    const val = e.target.value;
+    notesStore.set(val);
+    isSaved = true;
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+      isSaved = false;
+    }, 1800);
   }
 </script>
 
@@ -31,7 +24,7 @@
     {/if}
   </div>
   <textarea
-    bind:value={noteText}
+    value={noteText}
     oninput={handleInput}
     placeholder="Escribe tus notas o pendientes aquí..."
     aria-label="Bloc de notas rápido"
