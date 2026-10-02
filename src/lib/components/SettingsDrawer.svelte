@@ -341,31 +341,16 @@
             />
           </div>
 
-          <div class="row split">
-            <div class="field-col">
-              <label for="tabEmoji">Icono</label>
-              <input 
-                id="tabEmoji" 
-                type="text" 
-                maxLength={4}
-                class="emoji-input"
-                bind:value={settings.tabEmoji} 
-                oninput={() => settingsStore.set(settings)}
-                placeholder="⚡"
-                aria-label="Icono o emoji de la pestaña"
-              />
-            </div>
-            <div class="field-col">
-              <label for="tabTitle">Título de Pestaña</label>
-              <input 
-                id="tabTitle" 
-                type="text" 
-                bind:value={settings.tabTitle} 
-                oninput={() => settingsStore.set(settings)}
-                placeholder="NovaTab"
-                aria-label="Título de la pestaña"
-              />
-            </div>
+          <div class="row">
+            <label for="tabTitle">Título de Pestaña</label>
+            <input 
+              id="tabTitle" 
+              type="text" 
+              bind:value={settings.tabTitle} 
+              oninput={() => settingsStore.set(settings)}
+              placeholder="NovaTab"
+              aria-label="Título de la pestaña"
+            />
           </div>
 
           <div class="row">

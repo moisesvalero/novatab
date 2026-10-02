@@ -61,10 +61,21 @@
       targetUrl = buildSearchUrl(engineKey, q);
     }
 
-    if (searchInNewTab) {
-      window.open(targetUrl, '_blank');
+    const isStandalone = typeof window !== 'undefined' && (
+      window.navigator?.standalone === true ||
+      window.matchMedia?.('(display-mode: standalone)').matches
+    );
+
+    if (searchInNewTab || isStandalone) {
+      const link = document.createElement('a');
+      link.href = targetUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     } else {
-      window.location.href = targetUrl;
+      window.location.assign(targetUrl);
     }
   }
 

@@ -129,6 +129,23 @@
     if (wasDragging) {
       e.preventDefault();
       e.stopPropagation();
+      return;
+    }
+
+    const isStandalone = typeof window !== 'undefined' && (
+      window.navigator?.standalone === true ||
+      window.matchMedia?.('(display-mode: standalone)').matches
+    );
+
+    if (isStandalone) {
+      e.preventDefault();
+      const a = document.createElement('a');
+      a.href = e.currentTarget.href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     }
   }
 
