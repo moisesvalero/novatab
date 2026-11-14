@@ -25,8 +25,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))
       '@sveltejs/adapter-vercel':
-        specifier: ^6.3.4
-        version: 6.3.4(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))
+        specifier: ^6.3.5
+        version: 6.3.5(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))
       '@sveltejs/kit':
         specifier: ^2.70.3
         version: 2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0))
@@ -766,8 +766,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
-  '@sveltejs/adapter-vercel@6.3.4':
-    resolution: {integrity: sha512-MxEgTqIlmNg4qy5Rz4vwDKs2vNUrsL+DjcfegUVr/spPWSvWrSYFTUPY7tLbHsi8RxdUqpxC9UN/yzkOzZeMGA==}
+  '@sveltejs/adapter-vercel@6.3.5':
+    resolution: {integrity: sha512-GPBvJJ8DSWIOL1uMao00luM+EvjjflDR6PrUc7kuq+qv09t28XVk1AFGLSUTG1f5ypmnQmUayztgyAdsYH3eew==}
     engines: {node: '>=20.0'}
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
@@ -1945,7 +1945,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.9
       estree-walker: 2.0.2
-      picomatch: 4.0.5
+      picomatch: 4.0.7
 
   '@standard-schema/spec@1.1.0': {}
 
@@ -1961,7 +1961,7 @@ snapshots:
     dependencies:
       '@sveltejs/kit': 2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0))
 
-  '@sveltejs/adapter-vercel@6.3.4(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))':
+  '@sveltejs/adapter-vercel@6.3.5(@sveltejs/kit@2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))':
     dependencies:
       '@sveltejs/kit': 2.70.3(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0)))(svelte@5.57.1)(vite@8.2.1(@types/node@26.6.3)(esbuild@0.28.2)(yaml@2.9.0))
       '@vercel/nft': 1.10.2
@@ -2018,7 +2018,7 @@ snapshots:
       glob: 13.0.6
       graceful-fs: 4.2.11
       node-gyp-build: 4.8.4
-      picomatch: 4.0.5
+      picomatch: 4.0.7
       resolve-from: 5.0.0
     transitivePeerDependencies:
       - encoding
