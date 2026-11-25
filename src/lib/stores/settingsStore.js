@@ -25,15 +25,27 @@ const DEFAULT_SETTINGS = {
   weatherUnit: "celsius", // 'celsius' | 'fahrenheit'
 };
 
+function mergeSettings(raw) {
+  const parsed = raw && typeof raw === "object" ? raw : {};
+  return {
+    ...DEFAULT_SETTINGS,
+    ...parsed,
+    widgets: {
+      ...DEFAULT_SETTINGS.widgets,
+      ...(parsed.widgets && typeof parsed.widgets === "object" ? parsed.widgets : {}),
+    },
+  };
+}
+
 function createSettingsStore() {
   const isBrowser = typeof window !== "undefined";
-  let initial = DEFAULT_SETTINGS;
+  let initial = mergeSettings(null);
 
   if (isBrowser) {
     try {
       const saved = localStorage.getItem("novatab_settings");
       if (saved) {
-        initial = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        initial = mergeSettings(JSON.parse(saved));
       }
     } catch (e) {
       console.error("Error loading settings from localStorage", e);
@@ -45,10 +57,11 @@ function createSettingsStore() {
   return {
     subscribe,
     set: (value) => {
+      const merged = mergeSettings(value);
       if (isBrowser) {
-        localStorage.setItem("novatab_settings", JSON.stringify(value));
+        localStorage.setItem("novatab_settings", JSON.stringify(merged));
       }
-      set(value);
+      set(merged);
     },
     update: (fn) => {
       update((current) => {

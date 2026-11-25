@@ -53,7 +53,8 @@
 
 <style>
   .legal-container {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     padding: 40px 20px;
     display: flex;
     justify-content: center;

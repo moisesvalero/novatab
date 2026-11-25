@@ -94,12 +94,14 @@ function createBackgroundStore() {
       const saved = localStorage.getItem("novatab_background");
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Force migration: override any legacy 'newtab' setting to 'daily'
-        if (!parsed.changeFrequency || parsed.changeFrequency === "newtab") {
+        if (!parsed.changeFrequency) {
           parsed.changeFrequency = "daily";
         }
         if (parsed.changeFrequency === "daily") {
           parsed.currentIndex = getDailyIndex(CURATED_BACKGROUNDS.length);
+        } else if (parsed.changeFrequency === "newtab" && CURATED_BACKGROUNDS.length > 1) {
+          const prevIdx = Number.isInteger(parsed.currentIndex) ? parsed.currentIndex : 0;
+          parsed.currentIndex = (prevIdx + 1) % CURATED_BACKGROUNDS.length;
         }
         // Upgrade legacy 0px blur default to 5px on first visit
         if (

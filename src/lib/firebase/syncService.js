@@ -128,15 +128,12 @@ function createSyncService() {
           } catch (err) {
             console.error("Error applying remote data:", err);
           } finally {
+            isApplyingRemoteChange = false;
             syncStatus.set({
               status: "synced",
               lastSyncedAt: new Date(),
               error: null,
             });
-            // Margen para que los suscriptores locales de Svelte completen su ciclo
-            setTimeout(() => {
-              isApplyingRemoteChange = false;
-            }, 500);
           }
         } else {
           // Si el documento en la nube no existe aún, subimos el estado local actual

@@ -30,7 +30,7 @@
 
       <section>
         <h2>2. Datos Almacenados</h2>
-        <p>NovaTab <strong>NO</strong> recopila, transmite ni almacena ningún dato personal en servidores externos. Todas tus configuraciones (accesos directos, preferencias de widgets, fondos seleccionados, notas locales) se almacenan exclusivamente en el <code>LocalStorage</code> de tu propio navegador web.</p>
+        <p>Por defecto, NovaTab almacena tus configuraciones (accesos directos, preferencias de widgets, fondos seleccionados y notas) en el <code>LocalStorage</code> de tu navegador. De forma completamente <strong>opcional</strong>, si decides iniciar sesión con Google, dichos ajustes se sincronizan en tu cuenta mediante <strong>Firebase Authentication y Cloud Firestore</strong> (restringido exclusivamente a tu identificador de usuario).</p>
       </section>
 
       <section>
@@ -58,7 +58,8 @@
 
 <style>
   .legal-container {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     padding: 40px 20px;
     display: flex;
     justify-content: center;

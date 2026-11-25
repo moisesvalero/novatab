@@ -34,6 +34,14 @@ function createLinksStore() {
     }
   };
 
+  const safeHostname = (formattedUrl) => {
+    try {
+      return new URL(formattedUrl).hostname || formattedUrl;
+    } catch {
+      return formattedUrl;
+    }
+  };
+
   return {
     subscribe,
     addLink: (title, url) => {
@@ -43,7 +51,7 @@ function createLinksStore() {
       }
       const newLink = {
         id: Date.now().toString(),
-        title: title.trim() || new URL(formattedUrl).hostname,
+        title: title.trim() || safeHostname(formattedUrl),
         url: formattedUrl,
       };
       update((links) => {
@@ -62,7 +70,7 @@ function createLinksStore() {
           link.id === id
             ? {
                 ...link,
-                title: title.trim() || new URL(formattedUrl).hostname,
+                title: title.trim() || safeHostname(formattedUrl),
                 url: formattedUrl,
               }
             : link,

@@ -30,8 +30,8 @@
       </section>
 
       <section>
-        <h2>2. Licencia de Software (MIT)</h2>
-        <p>NovaTab es un proyecto de código abierto publicado bajo la <strong>Licencia MIT</strong>. Eres libre de usar, estudiar, modificar y redistribuir el código fuente de acuerdo con las condiciones establecidas en el repositorio oficial de GitHub.</p>
+        <h2>2. Licencia de Software (GNU GPL v3)</h2>
+        <p>NovaTab es un proyecto de código abierto publicado bajo la <strong>Licencia Pública General de GNU v3 (GPL-3.0-or-later)</strong>. Eres libre de usar, estudiar, modificar y redistribuir el código fuente de acuerdo con las condiciones establecidas en el archivo <code>LICENSE</code> del repositorio oficial de GitHub.</p>
       </section>
 
       <section>
@@ -49,7 +49,8 @@
 
 <style>
   .legal-container {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
